@@ -745,3 +745,228 @@ button {
     padding-bottom: 28px;
   }
 }
+
+@media (max-width: 460px), (max-height: 860px) {
+  .app-shell {
+    padding-top: max(10px, env(safe-area-inset-top));
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+  }
+
+  .screen {
+    gap: 12px;
+  }
+
+  .battle-screen {
+    gap: 10px;
+  }
+
+  .battle-topbar,
+  .weapon-panel {
+    gap: 10px;
+    border-radius: 18px;
+    padding: 10px 12px;
+  }
+
+  .shield-bar {
+    gap: 5px;
+  }
+
+  .shield-segment {
+    width: 20px;
+    height: 12px;
+  }
+
+  .battle-meta {
+    font-size: 0.8rem;
+  }
+
+  .battle-panel {
+    flex: 0 0 auto;
+    border-radius: 24px;
+    padding: 8px;
+  }
+
+  .status-ribbon {
+    gap: 10px;
+    margin-bottom: 6px;
+    border-radius: 16px;
+    padding: 8px 10px;
+    font-size: 0.85rem;
+  }
+
+  .status-ribbon strong {
+    font-size: 0.92rem;
+  }
+
+  .battle-canvas {
+    height: min(44vh, 280px);
+    min-height: 250px;
+    border-radius: 20px;
+  }
+
+  .station-overlay {
+    inset: auto 50% 40px auto;
+    width: 112px;
+    height: 108px;
+  }
+
+  .station-glow {
+    width: 112px;
+    height: 56px;
+  }
+
+  .station-platform {
+    bottom: 6px;
+    width: 112px;
+    height: 20px;
+    border-width: 3px;
+  }
+
+  .station-wing {
+    bottom: 11px;
+    width: 28px;
+    height: 14px;
+    border-width: 2px;
+  }
+
+  .station-wing.left {
+    left: 12px;
+  }
+
+  .station-wing.right {
+    right: 12px;
+  }
+
+  .station-column {
+    bottom: 19px;
+    width: 22px;
+    height: 44px;
+    border-width: 3px;
+  }
+
+  .station-gun {
+    bottom: 56px;
+    width: 14px;
+    height: 42px;
+    border-width: 3px;
+  }
+
+  .station-gun::before {
+    top: -11px;
+    width: 22px;
+    height: 9px;
+  }
+
+  .station-core {
+    bottom: 35px;
+    width: 14px;
+    height: 14px;
+  }
+
+  .enemy-overlay {
+    width: 58px;
+    height: 88px;
+  }
+
+  .enemy-overlay.is-boss {
+    width: 72px;
+    height: 108px;
+  }
+
+  .enemy-shadow {
+    width: 44px;
+    height: 14px;
+  }
+
+  .enemy-tail {
+    top: 2px;
+    width: 14px;
+    height: 14px;
+    border-width: 2px;
+  }
+
+  .enemy-body {
+    top: 12px;
+    width: 32px;
+    height: 56px;
+    border-width: 3px;
+    border-radius: 14px 14px 22px 22px;
+  }
+
+  .enemy-band {
+    top: 35px;
+    width: 40px;
+    height: 10px;
+  }
+
+  .enemy-nose {
+    bottom: 10px;
+    width: 22px;
+    height: 22px;
+    border-right-width: 3px;
+    border-bottom-width: 3px;
+  }
+
+  .enemy-fin {
+    top: 14px;
+    width: 14px;
+    height: 20px;
+    border-width: 2px;
+  }
+
+  .enemy-fin.left {
+    left: 7px;
+  }
+
+  .enemy-fin.right {
+    right: 7px;
+  }
+
+  .enemy-bolt {
+    top: 25px;
+    width: 8px;
+    height: 8px;
+  }
+
+  .question-panel {
+    inset: auto 12px 12px 12px;
+    gap: 8px;
+  }
+
+  .formula,
+  .feedback-banner {
+    border-radius: 18px;
+    padding: 10px 14px;
+  }
+
+  .formula {
+    font-size: clamp(1.45rem, 6vw, 2.1rem);
+  }
+
+  .feedback-banner {
+    min-height: 42px;
+    font-size: 0.9rem;
+  }
+
+  .weapon-panel {
+    align-items: stretch;
+  }
+
+  .weapon-panel span {
+    font-size: 0.92rem;
+    line-height: 1.2;
+  }
+
+  .charge-bar {
+    height: 8px;
+  }
+
+  .answers-grid {
+    gap: 10px;
+  }
+
+  .answer-button {
+    min-height: 70px;
+    font-size: 1.45rem;
+  }
+}
