@@ -292,22 +292,7 @@ export class BattleScene extends Phaser.Scene {
       this.beam.clear();
     });
 
-    this.tweens.add({
-      targets: [this.enemyHalo, this.enemy],
-      scale: 1.4,
-      alpha: 0,
-      duration: 280,
-      onComplete: () => {
-        const burst = this.add.circle(this.enemy.x, this.enemy.y, 12, 0xffffff, 0.95);
-        this.tweens.add({
-          targets: burst,
-          scale: 6,
-          alpha: 0,
-          duration: 360,
-          onComplete: () => burst.destroy()
-        });
-      }
-    });
+    this.playSuccessAnimation();
   }
 
   private playDamageAnimation() {
@@ -334,6 +319,56 @@ export class BattleScene extends Phaser.Scene {
           onComplete: () => impact.destroy()
         });
       }
+    });
+  }
+
+  private playSuccessAnimation() {
+    const successFlash = this.add.circle(this.enemy.x, this.enemy.y, 16, 0x7dff9d, 0.42);
+    const successRing = this.add.circle(this.enemy.x, this.enemy.y, 12, 0xbaffc8, 0.95);
+    successRing.setStrokeStyle(4, 0xd9ffe3, 0.95);
+    successRing.setFillStyle(0x7dff9d, 0.18);
+
+    this.tweens.add({
+      targets: [successFlash, successRing],
+      scale: 4.6,
+      alpha: 0,
+      duration: 320,
+      onComplete: () => {
+        successFlash.destroy();
+        successRing.destroy();
+      }
+    });
+
+    for (let index = 0; index < 8; index += 1) {
+      const sparkle = this.add.circle(this.enemy.x, this.enemy.y, 4, 0xc7ffd8, 0.96);
+      const angle = Phaser.Math.DegToRad(index * 45 + Phaser.Math.Between(-10, 10));
+      const distance = Phaser.Math.Between(26, 48);
+      this.tweens.add({
+        targets: sparkle,
+        x: this.enemy.x + Math.cos(angle) * distance,
+        y: this.enemy.y + Math.sin(angle) * distance - 8,
+        scale: 0.2,
+        alpha: 0,
+        duration: 360,
+        ease: "Quad.easeOut",
+        onComplete: () => sparkle.destroy()
+      });
+    }
+
+    this.tweens.add({
+      targets: this.enemyHalo,
+      scale: 1.55,
+      alpha: 0,
+      duration: 240
+    });
+
+    this.tweens.add({
+      targets: this.enemy,
+      y: this.enemy.y - 34,
+      scale: this.enemy.scaleX * 0.7,
+      alpha: 0,
+      duration: 280,
+      ease: "Quad.easeOut"
     });
   }
 

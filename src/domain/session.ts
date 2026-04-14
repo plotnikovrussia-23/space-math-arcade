@@ -15,12 +15,12 @@ export const MAX_SHIELD = 5;
 export const RESPONSE_WINDOW_LEVELS: ResponseWindowLevel[] = [1, 2, 3, 4, 5, 6];
 
 const RESPONSE_WINDOW_MULTIPLIER: Record<ResponseWindowLevel, number> = {
-  1: 0.72,
-  2: 0.86,
+  1: 1.62,
+  2: 1.38,
   3: 1,
-  4: 1.18,
-  5: 1.38,
-  6: 1.62
+  4: 0.86,
+  5: 0.72,
+  6: 0.58
 };
 
 export const QUESTION_TIME_LIMIT_MS = (
