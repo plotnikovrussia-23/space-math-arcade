@@ -17,12 +17,14 @@ describe("facts", () => {
     expect(formatPrompt(family!, "divideByA")).toMatchObject({
       text: "42 ÷ 6",
       correctAnswer: 7,
-      revealText: "42 ÷ 6 = 7"
+      revealText: "42 ÷ 6 = 7",
+      spokenRevealText: "42 разделить на 6 равно 7"
     });
     expect(formatPrompt(family!, "divideByB")).toMatchObject({
       text: "42 ÷ 7",
       correctAnswer: 6,
-      revealText: "42 ÷ 7 = 6"
+      revealText: "42 ÷ 7 = 6",
+      spokenRevealText: "42 разделить на 7 равно 6"
     });
   });
 });

@@ -62,6 +62,7 @@ export interface Question {
   text: string;
   spokenText: string;
   revealText: string;
+  spokenRevealText: string;
   correctAnswer: number;
   options: number[];
   planetId: PlanetId;

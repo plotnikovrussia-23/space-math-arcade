@@ -191,6 +191,7 @@ export const generateMissionQuestions = ({
       text: prompt.text,
       spokenText: prompt.spokenText,
       revealText: prompt.revealText,
+      spokenRevealText: prompt.spokenRevealText,
       correctAnswer: prompt.correctAnswer,
       options: buildDistractors(family, prompt.correctAnswer),
       planetId,

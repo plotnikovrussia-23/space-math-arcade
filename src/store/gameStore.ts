@@ -421,7 +421,7 @@ const submitBattleAnswer = (
       audioDirector.playSfx("upgrade");
     }
     void audioDirector
-      .speakAndWait(question.revealText, {
+      .speakAndWait(question.spokenRevealText, {
         minimumDurationMs: SUCCESS_REVEAL_MIN_DELAY_MS
       })
       .then(() => {

@@ -28,7 +28,12 @@ export const formatPrompt = (
   promptType: PromptType
 ): Pick<
   import("../types").Question,
-  "text" | "spokenText" | "correctAnswer" | "revealText" | "promptId"
+  | "text"
+  | "spokenText"
+  | "correctAnswer"
+  | "revealText"
+  | "spokenRevealText"
+  | "promptId"
 > => {
   if (promptType === "multiply") {
     return {
@@ -36,6 +41,7 @@ export const formatPrompt = (
       spokenText: `${family.a} умножить на ${family.b}`,
       correctAnswer: family.product,
       revealText: `${family.a} × ${family.b} = ${family.product}`,
+      spokenRevealText: `${family.a} умножить на ${family.b} равно ${family.product}`,
       promptId: `${family.id}:multiply`
     };
   }
@@ -46,6 +52,7 @@ export const formatPrompt = (
       spokenText: `${family.product} разделить на ${family.a}`,
       correctAnswer: family.b,
       revealText: `${family.product} ÷ ${family.a} = ${family.b}`,
+      spokenRevealText: `${family.product} разделить на ${family.a} равно ${family.b}`,
       promptId: `${family.id}:divideByA`
     };
   }
@@ -55,6 +62,7 @@ export const formatPrompt = (
     spokenText: `${family.product} разделить на ${family.b}`,
     correctAnswer: family.a,
     revealText: `${family.product} ÷ ${family.b} = ${family.a}`,
+    spokenRevealText: `${family.product} разделить на ${family.b} равно ${family.a}`,
     promptId: `${family.id}:divideByB`
   };
 };
