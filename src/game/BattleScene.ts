@@ -5,6 +5,7 @@ import type { PlanetId, QuestionOutcome } from "../types";
 const SCENE_WIDTH = 414;
 const SCENE_HEIGHT = 500;
 const BASE_SCENE_HEIGHT = 620;
+const SCENE_COMPACT_SCALE = 0.86;
 const scaleY = (value: number) => (value / BASE_SCENE_HEIGHT) * SCENE_HEIGHT;
 
 export interface SceneQuestionPayload {
@@ -39,7 +40,7 @@ export class BattleScene extends Phaser.Scene {
   private enemyStartX = 207;
   private enemyStartY = -80;
   private enemyTargetX = 207;
-  private enemyTargetY = scaleY(470);
+  private enemyTargetY = scaleY(430);
 
   constructor() {
     super("BattleScene");
@@ -92,46 +93,46 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private createStation() {
-    const glow = this.add.ellipse(207, scaleY(542), 132, 84, 0x59d6ff, 0.12);
-    const platform = this.add.rectangle(207, scaleY(556), 138, 26, 0xe8f7ff, 0.96);
+    const glow = this.add.ellipse(207, scaleY(536), 116, 70, 0x59d6ff, 0.12);
+    const platform = this.add.rectangle(207, scaleY(548), 118, 22, 0xe8f7ff, 0.96);
     platform.setStrokeStyle(4, 0x92dfff, 0.9);
-    const shadow = this.add.ellipse(207, scaleY(566), 114, 18, 0x7ab9ff, 0.18);
+    const shadow = this.add.ellipse(207, scaleY(556), 98, 16, 0x7ab9ff, 0.18);
     const wingLeft = this.add.triangle(
-      170,
-      scaleY(548),
-      -26,
+      176,
+      scaleY(541),
+      -20,
       0,
-      10,
-      -14,
-      10,
-      14,
+      8,
+      -11,
+      8,
+      11,
       0x31a9ff,
       0.92
     );
     wingLeft.setStrokeStyle(3, 0xffffff, 0.65);
     const wingRight = this.add.triangle(
-      244,
-      scaleY(548),
-      26,
+      238,
+      scaleY(541),
+      20,
       0,
-      -10,
-      -14,
-      -10,
-      14,
+      -8,
+      -11,
+      -8,
+      11,
       0x31a9ff,
       0.92
     );
     wingRight.setStrokeStyle(3, 0xffffff, 0.65);
-    const column = this.add.rectangle(207, scaleY(522), 24, 54, 0x2b8cff, 1);
+    const column = this.add.rectangle(207, scaleY(516), 22, 44, 0x2b8cff, 1);
     column.setStrokeStyle(4, 0xffffff, 0.72);
-    const cannonBase = this.add.rectangle(207, scaleY(488), 46, 20, 0x163b9f, 1);
+    const cannonBase = this.add.rectangle(207, scaleY(480), 36, 16, 0x163b9f, 1);
     cannonBase.setStrokeStyle(3, 0x8ee6ff, 0.9);
-    const cannon = this.add.rectangle(207, scaleY(462), 16, 52, 0x2fe1ff, 1);
+    const cannon = this.add.rectangle(207, scaleY(458), 14, 42, 0x2fe1ff, 1);
     cannon.setStrokeStyle(4, 0xffffff, 0.92);
-    const muzzle = this.add.rectangle(207, scaleY(440), 28, 12, 0xfff6a0, 0.98);
+    const muzzle = this.add.rectangle(207, scaleY(440), 22, 10, 0xfff6a0, 0.98);
     muzzle.setStrokeStyle(2, 0xffffff, 0.92);
-    const core = this.add.circle(207, scaleY(520), 10, 0xfff7bf, 0.98);
-    const coreHalo = this.add.circle(207, scaleY(520), 22, 0x7ce6ff, 0.22);
+    const core = this.add.circle(207, scaleY(516), 9, 0xfff7bf, 0.98);
+    const coreHalo = this.add.circle(207, scaleY(516), 18, 0x7ce6ff, 0.22);
 
     this.station = this.add.container(0, 0, [
       glow,
@@ -158,12 +159,12 @@ export class BattleScene extends Phaser.Scene {
     }
 
     const tint = PLANET_BY_ID[this.currentPlanetId].enemyTint;
-    this.enemyHalo = this.add.circle(207, -80, isBoss ? 62 : 48, tint, 0.2);
-    this.enemy = this.add.circle(207, -80, isBoss ? 42 : 32, tint, 1);
+    this.enemyHalo = this.add.circle(207, -80, isBoss ? 52 : 40, tint, 0.2);
+    this.enemy = this.add.circle(207, -80, isBoss ? 35 : 26, tint, 1);
     this.enemy.setStrokeStyle(7, 0x1038a6, 0.95);
-    this.enemyCore = this.add.circle(207, -80, isBoss ? 18 : 12, 0xffffff, 0.92);
-    this.enemyEye = this.add.circle(207, -80, isBoss ? 10 : 7, 0xff5577, 0.95);
-    this.enemyPupil = this.add.circle(207, -80, isBoss ? 4 : 3, 0xffffff, 0.92);
+    this.enemyCore = this.add.circle(207, -80, isBoss ? 14 : 10, 0xffffff, 0.92);
+    this.enemyEye = this.add.circle(207, -80, isBoss ? 8 : 6, 0xff5577, 0.95);
+    this.enemyPupil = this.add.circle(207, -80, isBoss ? 3 : 2, 0xffffff, 0.92);
 
     this.enemyHalo.setDepth(3);
     this.enemy.setDepth(4);
@@ -206,7 +207,7 @@ export class BattleScene extends Phaser.Scene {
     this.enemyStartX = Phaser.Math.Between(120, 294);
     this.enemyStartY = scaleY(112);
     this.enemyTargetX = 207;
-    this.enemyTargetY = scaleY(450);
+    this.enemyTargetY = scaleY(420);
     this.enemyApproachStartTime = this.time.now;
     this.enemyApproachDuration = payload.timeLimitMs;
     this.enemyApproachActive = true;
@@ -214,7 +215,7 @@ export class BattleScene extends Phaser.Scene {
     this.setEnemyTransform(
       this.enemyStartX,
       this.enemyStartY,
-      payload.isBoss ? 1.12 : 1,
+      (payload.isBoss ? 1.08 : 0.94) * SCENE_COMPACT_SCALE,
       1
     );
 
@@ -305,13 +306,13 @@ export class BattleScene extends Phaser.Scene {
         this.enemyPupil
       ],
       x: 207,
-      y: scaleY(506),
+      y: scaleY(480),
       duration: 220,
       ease: "Quad.easeIn",
       onComplete: () => {
         this.cameras.main.shake(260, 0.012);
         this.cameras.main.flash(180, 255, 96, 96, true);
-        const impact = this.add.circle(207, scaleY(520), 26, 0xff6f6f, 0.45);
+        const impact = this.add.circle(207, scaleY(500), 22, 0xff6f6f, 0.45);
         this.tweens.add({
           targets: impact,
           scale: 4,
@@ -352,7 +353,7 @@ export class BattleScene extends Phaser.Scene {
     this.enemyEye.setPosition(x, y);
     this.enemyPupil.setPosition(x, y);
 
-    this.enemyHalo.setScale(scale * 1.12);
+    this.enemyHalo.setScale(scale * 1.08);
     this.enemy.setScale(scale);
     this.enemyCore.setScale(scale);
     this.enemyEye.setScale(scale);

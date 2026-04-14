@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
 import { PLANETS, PLANET_BY_ID, getPlanetIndex } from "../config/planets";
-import { QUESTION_TIME_LIMIT_MS } from "../domain/session";
 import { getStreakLabel } from "../domain/session";
 import { PhaserBattle } from "./PhaserBattle";
 import { getBannerText, getCurrentQuestion, useGameStore } from "../store/gameStore";
-import type { BattleSession, GameMode, PlanetId } from "../types";
+import type { GameMode, PlanetId } from "../types";
 
 const modeMeta: Record<
   GameMode,
@@ -220,7 +218,6 @@ export function BattleScreen() {
           <strong>{streakLabel || "БОЕВАЯ ГОТОВНОСТЬ"}</strong>
         </div>
         <PhaserBattle />
-        <EnemyOverlay battle={battle} />
         <div className="question-panel">
           <div className="formula">
             {battle.currentOutcome?.revealText ?? question?.text ?? "Готовься"}
@@ -244,85 +241,6 @@ export function BattleScreen() {
         ))}
       </div>
     </section>
-  );
-}
-
-function EnemyOverlay({ battle }: { battle: BattleSession }) {
-  const [now, setNow] = useState(() => performance.now());
-
-  useEffect(() => {
-    let frameId = 0;
-
-    const update = () => {
-      setNow(performance.now());
-      frameId = window.requestAnimationFrame(update);
-    };
-
-    frameId = window.requestAnimationFrame(update);
-
-    return () => {
-      window.cancelAnimationFrame(frameId);
-    };
-  }, [battle.currentQuestionIndex]);
-
-  const question = getCurrentQuestion(battle);
-
-  if (!question) {
-    return null;
-  }
-
-  const limit = QUESTION_TIME_LIMIT_MS(battle.planetId);
-  const elapsed = Math.max(0, now - battle.questionStartedAt);
-  const progress = Math.min(1, elapsed / limit);
-  const eased = progress * progress;
-  const hash = [...question.id].reduce((sum, char) => sum + char.charCodeAt(0), 0);
-  const leftPercent = 22 + (hash % 54);
-  const topPercent = 12 + eased * 50;
-  const dx = leftPercent - 50;
-  const dy = topPercent - 82;
-  const turretAngle = Math.atan2(dx, -dy) * (180 / Math.PI);
-  const outcome = battle.currentOutcome;
-  const stateClass =
-    outcome?.status === "wrong" || outcome?.status === "timeout"
-      ? "is-crash"
-      : outcome
-        ? "is-hit"
-        : "";
-
-  return (
-    <>
-      <div
-        className="station-overlay"
-        style={{ "--gun-angle": `${turretAngle}deg` } as React.CSSProperties}
-      >
-        <div className="station-glow" />
-        <div className="station-platform" />
-        <div className="station-wing left" />
-        <div className="station-wing right" />
-        <div className="station-column" />
-        <div className="station-gun" />
-        <div className="station-core" />
-      </div>
-      <div
-        className={`enemy-overlay ${question.difficultyTier === "boss" ? "is-boss" : ""} ${stateClass}`}
-        style={
-          {
-            left: `${leftPercent}%`,
-            top: `${topPercent}%`,
-            "--planet-accent": PLANET_BY_ID[battle.planetId].accent
-          } as React.CSSProperties
-        }
-      >
-        <div className="enemy-shadow" />
-        <div className="enemy-fin left" />
-        <div className="enemy-fin right" />
-        <div className="enemy-tail" />
-        <div className="enemy-body" />
-        <div className="enemy-band" />
-        <div className="enemy-nose" />
-        <div className="enemy-bolt" />
-      </div>
-    </>
   );
 }
 

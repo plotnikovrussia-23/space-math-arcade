@@ -335,6 +335,8 @@ button {
 }
 
 .battle-screen {
+  flex: 1 1 auto;
+  min-height: 0;
   gap: 12px;
 }
 
@@ -386,7 +388,7 @@ button {
 .battle-panel {
   position: relative;
   overflow: hidden;
-  flex: 0 0 auto;
+  flex: 1 1 auto;
   min-height: 0;
   border-radius: 28px;
   background: rgba(255, 255, 255, 0.32);
@@ -414,7 +416,7 @@ button {
 .battle-canvas {
   width: 100%;
   height: min(36dvh, 240px);
-  min-height: 210px;
+  min-height: 0;
   display: flex;
   align-items: stretch;
   overflow: hidden;
@@ -715,6 +717,7 @@ button {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
+  flex: 0 0 auto;
 }
 
 .answer-button {
@@ -798,13 +801,15 @@ button {
   }
 
   .battle-screen {
+    flex: 1 1 auto;
+    min-height: 0;
     gap: 10px;
   }
 
   .battle-topbar {
     gap: 10px;
     border-radius: 18px;
-    padding: 9px 12px;
+    padding: 8px 10px;
   }
 
   .shield-bar {
@@ -817,20 +822,22 @@ button {
   }
 
   .battle-meta {
-    font-size: 0.78rem;
+    font-size: 0.74rem;
   }
 
   .battle-meta strong {
-    font-size: 0.94rem;
+    font-size: 0.88rem;
   }
 
   .battle-weapon {
-    font-size: 0.72rem;
+    font-size: 0.68rem;
   }
 
   .battle-panel {
+    flex: 1 1 auto;
+    min-height: 0;
     border-radius: 24px;
-    padding: 7px;
+    padding: 6px;
   }
 
   .status-ribbon {
@@ -846,161 +853,305 @@ button {
   }
 
   .battle-canvas {
-    height: min(30dvh, 205px);
-    min-height: 180px;
+    height: min(28dvh, 185px);
+    flex: 1 1 auto;
+    min-height: 150px;
     border-radius: 20px;
   }
 
   .station-overlay {
-    inset: auto 50% 40px auto;
-    width: 112px;
-    height: 108px;
+    inset: auto 50% 34px auto;
+    width: 102px;
+    height: 96px;
   }
 
   .station-glow {
-    width: 112px;
-    height: 56px;
+    width: 98px;
+    height: 46px;
   }
 
   .station-platform {
-    bottom: 6px;
-    width: 112px;
-    height: 20px;
+    bottom: 5px;
+    width: 100px;
+    height: 18px;
     border-width: 3px;
   }
 
   .station-wing {
-    bottom: 11px;
-    width: 28px;
-    height: 14px;
+    bottom: 9px;
+    width: 22px;
+    height: 12px;
     border-width: 2px;
   }
 
   .station-wing.left {
-    left: 12px;
+    left: 10px;
   }
 
   .station-wing.right {
-    right: 12px;
+    right: 10px;
   }
 
   .station-column {
-    bottom: 19px;
-    width: 22px;
-    height: 44px;
+    bottom: 16px;
+    width: 20px;
+    height: 38px;
     border-width: 3px;
   }
 
   .station-gun {
-    bottom: 56px;
-    width: 14px;
-    height: 42px;
+    bottom: 48px;
+    width: 12px;
+    height: 34px;
     border-width: 3px;
   }
 
   .station-gun::before {
-    top: -11px;
-    width: 22px;
-    height: 9px;
+    top: -9px;
+    width: 18px;
+    height: 8px;
   }
 
   .station-core {
-    bottom: 35px;
-    width: 14px;
-    height: 14px;
+    bottom: 29px;
+    width: 12px;
+    height: 12px;
   }
 
   .enemy-overlay {
-    width: 58px;
-    height: 88px;
+    width: 52px;
+    height: 78px;
   }
 
   .enemy-overlay.is-boss {
-    width: 72px;
-    height: 108px;
+    width: 64px;
+    height: 96px;
   }
 
   .enemy-shadow {
-    width: 44px;
-    height: 14px;
+    width: 38px;
+    height: 12px;
   }
 
   .enemy-tail {
     top: 2px;
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
     border-width: 2px;
   }
 
   .enemy-body {
-    top: 12px;
-    width: 32px;
-    height: 56px;
+    top: 10px;
+    width: 28px;
+    height: 48px;
     border-width: 3px;
     border-radius: 14px 14px 22px 22px;
   }
 
   .enemy-band {
-    top: 35px;
-    width: 40px;
-    height: 10px;
+    top: 30px;
+    width: 34px;
+    height: 8px;
   }
 
   .enemy-nose {
-    bottom: 10px;
-    width: 22px;
-    height: 22px;
+    bottom: 9px;
+    width: 18px;
+    height: 18px;
     border-right-width: 3px;
     border-bottom-width: 3px;
   }
 
   .enemy-fin {
-    top: 14px;
-    width: 14px;
-    height: 20px;
+    top: 12px;
+    width: 11px;
+    height: 16px;
     border-width: 2px;
   }
 
   .enemy-fin.left {
-    left: 7px;
+    left: 6px;
   }
 
   .enemy-fin.right {
-    right: 7px;
+    right: 6px;
   }
 
   .enemy-bolt {
-    top: 25px;
-    width: 8px;
-    height: 8px;
+    top: 21px;
+    width: 7px;
+    height: 7px;
   }
 
   .question-panel {
-    inset: auto 10px 10px 10px;
-    gap: 6px;
+    inset: auto 8px 8px 8px;
+    gap: 5px;
   }
 
   .formula,
   .feedback-banner {
-    border-radius: 18px;
-    padding: 8px 12px;
+    border-radius: 16px;
+    padding: 7px 10px;
   }
 
   .formula {
-    font-size: clamp(1.3rem, 5.5vw, 1.9rem);
+    font-size: clamp(1.15rem, 5vw, 1.65rem);
+    line-height: 1.05;
   }
 
   .feedback-banner {
-    min-height: 34px;
-    font-size: 0.82rem;
+    min-height: 30px;
+    font-size: 0.76rem;
   }
 
   .answers-grid {
-    gap: 10px;
+    gap: 8px;
   }
 
   .answer-button {
-    min-height: 68px;
-    font-size: 1.45rem;
+    min-height: 56px;
+    border-radius: 18px;
+    font-size: 1.2rem;
+    box-shadow: 0 10px 18px rgba(16, 56, 166, 0.12);
+  }
+}
+
+@media (max-height: 740px) {
+  .app-shell {
+    padding-top: max(8px, env(safe-area-inset-top));
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+  }
+
+  .screen {
+    gap: 10px;
+  }
+
+  .battle-screen {
+    gap: 8px;
+  }
+
+  .battle-topbar {
+    padding: 7px 9px;
+  }
+
+  .shield-segment {
+    width: 18px;
+    height: 10px;
+  }
+
+  .battle-meta {
+    gap: 1px;
+    font-size: 0.7rem;
+  }
+
+  .battle-meta strong {
+    font-size: 0.82rem;
+  }
+
+  .battle-weapon {
+    font-size: 0.64rem;
+  }
+
+  .status-ribbon {
+    margin-bottom: 4px;
+    padding: 6px 8px;
+    font-size: 0.72rem;
+  }
+
+  .status-ribbon strong {
+    font-size: 0.78rem;
+  }
+
+  .battle-canvas {
+    height: min(24dvh, 152px);
+    min-height: 126px;
+  }
+
+  .station-overlay {
+    inset: auto 50% 28px auto;
+    width: 92px;
+    height: 88px;
+  }
+
+  .station-glow {
+    width: 88px;
+    height: 38px;
+  }
+
+  .station-platform {
+    width: 88px;
+    height: 16px;
+  }
+
+  .station-column {
+    bottom: 14px;
+    width: 18px;
+    height: 32px;
+  }
+
+  .station-gun {
+    bottom: 40px;
+    width: 10px;
+    height: 28px;
+  }
+
+  .station-core {
+    bottom: 24px;
+    width: 10px;
+    height: 10px;
+  }
+
+  .enemy-overlay {
+    width: 46px;
+    height: 68px;
+  }
+
+  .enemy-overlay.is-boss {
+    width: 58px;
+    height: 84px;
+  }
+
+  .enemy-shadow {
+    width: 32px;
+    height: 10px;
+  }
+
+  .enemy-body {
+    width: 24px;
+    height: 42px;
+  }
+
+  .enemy-band {
+    top: 27px;
+    width: 30px;
+    height: 7px;
+  }
+
+  .question-panel {
+    inset: auto 7px 7px 7px;
+    gap: 4px;
+  }
+
+  .formula,
+  .feedback-banner {
+    padding: 6px 9px;
+  }
+
+  .formula {
+    font-size: clamp(1rem, 4.5vw, 1.35rem);
+  }
+
+  .feedback-banner {
+    min-height: 26px;
+    font-size: 0.7rem;
+  }
+
+  .answers-grid {
+    gap: 7px;
+  }
+
+  .answer-button {
+    min-height: 50px;
+    font-size: 1.05rem;
   }
 }
