@@ -368,7 +368,7 @@ button {
   gap: 12px;
   border-radius: 22px;
   background: rgba(255, 255, 255, 0.72);
-  padding: 10px 14px;
+  padding: 9px 14px;
 }
 
 .shield-bar {
@@ -457,10 +457,10 @@ button {
   min-height: 0;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
-  gap: 8px;
+  gap: 6px;
   border-radius: 28px;
   background: rgba(255, 255, 255, 0.32);
-  padding: 8px;
+  padding: 8px 8px 6px;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.44);
 }
 
@@ -469,10 +469,10 @@ button {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   border-radius: 18px;
   background: linear-gradient(135deg, var(--planet-accent, #37d8ff), rgba(255, 255, 255, 0.75));
-  padding: 8px 10px;
+  padding: 7px 10px;
   color: #12325f;
   font-size: 0.88rem;
 }
@@ -483,7 +483,7 @@ button {
 
 .battle-canvas {
   width: 100%;
-  min-height: clamp(220px, 38svh, 320px);
+  min-height: clamp(196px, 33svh, 272px);
   height: 100%;
   flex: 1 1 auto;
   display: flex;
@@ -756,20 +756,20 @@ button {
 .feedback-banner {
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.88);
-  padding: 9px 14px;
+  padding: 8px 14px;
   text-align: center;
   box-shadow: 0 8px 16px rgba(16, 56, 166, 0.1);
 }
 
 .formula {
-  font-size: clamp(1.25rem, 5.6vw, 2rem);
+  font-size: clamp(1.16rem, 5.2vw, 1.85rem);
   font-weight: 800;
   letter-spacing: 0.02em;
   line-height: 1.05;
 }
 
 .feedback-banner {
-  min-height: 32px;
+  min-height: 30px;
   font-size: 0.84rem;
   font-weight: 800;
   color: #1753db;
@@ -879,7 +879,7 @@ button {
   .battle-topbar {
     gap: 10px;
     border-radius: 18px;
-    padding: 9px 11px;
+    padding: 8px 11px;
   }
 
   .shield-bar {
@@ -925,15 +925,15 @@ button {
     flex: 1 1 auto;
     min-height: 0;
     border-radius: 24px;
-    gap: 7px;
-    padding: 7px;
+    gap: 5px;
+    padding: 7px 7px 5px;
   }
 
   .status-ribbon {
     gap: 8px;
     margin-bottom: 4px;
     border-radius: 14px;
-    padding: 7px 9px;
+    padding: 6px 9px;
     font-size: 0.8rem;
   }
 
@@ -942,7 +942,7 @@ button {
   }
 
   .battle-canvas {
-    min-height: clamp(236px, 34dvh, 290px);
+    min-height: clamp(198px, 29dvh, 238px);
     border-radius: 20px;
   }
 
@@ -1077,16 +1077,16 @@ button {
   .formula,
   .feedback-banner {
     border-radius: 16px;
-    padding: 8px 11px;
+    padding: 7px 11px;
   }
 
   .formula {
-    font-size: clamp(1.08rem, 4.8vw, 1.42rem);
+    font-size: clamp(1.02rem, 4.6vw, 1.32rem);
     line-height: 1.05;
   }
 
   .feedback-banner {
-    min-height: 26px;
+    min-height: 24px;
     font-size: 0.72rem;
   }
 
@@ -1118,7 +1118,7 @@ button {
   }
 
   .battle-topbar {
-    padding: 8px 10px;
+    padding: 7px 10px;
   }
 
   .shield-segment {
@@ -1155,7 +1155,7 @@ button {
 
   .status-ribbon {
     margin-bottom: 4px;
-    padding: 6px 8px;
+    padding: 5px 8px;
     font-size: 0.72rem;
   }
 
@@ -1164,7 +1164,7 @@ button {
   }
 
   .battle-canvas {
-    min-height: clamp(208px, 31dvh, 240px);
+    min-height: clamp(178px, 25dvh, 206px);
   }
 
   .station-overlay {
@@ -1233,11 +1233,11 @@ button {
 
   .formula,
   .feedback-banner {
-    padding: 7px 10px;
+    padding: 6px 10px;
   }
 
   .formula {
-    font-size: clamp(1rem, 4.5vw, 1.26rem);
+    font-size: clamp(0.96rem, 4.3vw, 1.18rem);
   }
 
   .feedback-banner {
@@ -1272,7 +1272,7 @@ button {
   .battle-topbar {
     gap: 8px;
     border-radius: 16px;
-    padding: 7px 9px;
+    padding: 6px 9px;
   }
 
   .shield-segment {
@@ -1295,8 +1295,8 @@ button {
 
   .battle-panel {
     border-radius: 20px;
-    gap: 6px;
-    padding: 6px;
+    gap: 4px;
+    padding: 6px 6px 4px;
   }
 
   .response-tuning-panel {
@@ -1322,7 +1322,7 @@ button {
     gap: 6px;
     margin-bottom: 3px;
     border-radius: 12px;
-    padding: 5px 7px;
+    padding: 4px 7px;
     font-size: 0.68rem;
   }
 
@@ -1331,7 +1331,7 @@ button {
   }
 
   .battle-canvas {
-    min-height: clamp(196px, 29svh, 222px);
+    min-height: clamp(166px, 23svh, 188px);
     border-radius: 16px;
   }
 
@@ -1342,17 +1342,17 @@ button {
   .formula,
   .feedback-banner {
     border-radius: 14px;
-    padding: 6px 9px;
+    padding: 5px 9px;
   }
 
   .formula {
-    font-size: clamp(0.96rem, 4.2vw, 1.12rem);
+    font-size: clamp(0.92rem, 4vw, 1.02rem);
     line-height: 1;
   }
 
   .feedback-banner {
-    min-height: 20px;
-    font-size: 0.64rem;
+    min-height: 18px;
+    font-size: 0.6rem;
   }
 
   .answers-grid {
@@ -1360,9 +1360,9 @@ button {
   }
 
   .answer-button {
-    min-height: 48px;
+    min-height: 46px;
     border-radius: 16px;
-    font-size: 1.04rem;
+    font-size: 1rem;
     box-shadow: 0 8px 14px rgba(16, 56, 166, 0.1);
   }
 }
