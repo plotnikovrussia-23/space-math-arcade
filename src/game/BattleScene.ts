@@ -122,46 +122,107 @@ export class BattleScene extends Phaser.Scene {
     wingRight.setStrokeStyle(3, 0xffffff, 0.65);
     const column = this.add.rectangle(207, scaleY(516), 22, 44, 0x2b8cff, 1);
     column.setStrokeStyle(4, 0xffffff, 0.72);
-    const cannonMount = this.add.ellipse(207, scaleY(486), 44, 24, 0x1945af, 1);
-    cannonMount.setStrokeStyle(4, 0x9ae9ff, 0.88);
-    const cannonJoint = this.add.circle(207, scaleY(478), 8, 0xffd97d, 0.98);
+    const baseSkirt = this.add.ellipse(207, scaleY(500), 60, 30, 0x14357f, 0.96);
+    baseSkirt.setStrokeStyle(4, 0x8fe8ff, 0.72);
+    const cannonMount = this.add.ellipse(207, scaleY(484), 48, 28, 0x204fb0, 1);
+    cannonMount.setStrokeStyle(4, 0xa9f2ff, 0.88);
+    const energyRing = this.add.ellipse(207, scaleY(484), 24, 24, 0x9cf6ff, 0.2);
+    energyRing.setStrokeStyle(4, 0xc8fbff, 0.88);
+    const cannonJoint = this.add.circle(207, scaleY(476), 9, 0xffd97d, 0.98);
     cannonJoint.setStrokeStyle(2, 0xffffff, 0.82);
-    const cannonBarrel = this.add.rectangle(207, scaleY(456), 18, 58, 0x2dd8ff, 1);
-    cannonBarrel.setStrokeStyle(4, 0xffffff, 0.92);
-    const cannonSleeveLeft = this.add.triangle(
-      199,
-      scaleY(456),
-      -13,
-      4,
-      -2,
-      -16,
-      -2,
-      20,
-      0x1750b8,
-      0.98
-    );
-    cannonSleeveLeft.setStrokeStyle(2, 0xaef4ff, 0.82);
-    const cannonSleeveRight = this.add.triangle(
-      215,
-      scaleY(456),
-      13,
-      4,
-      2,
-      -16,
-      2,
-      20,
-      0x1750b8,
-      0.98
-    );
-    cannonSleeveRight.setStrokeStyle(2, 0xaef4ff, 0.82);
-    const muzzleBody = this.add.rectangle(207, scaleY(426), 24, 16, 0x0e2e84, 1);
-    muzzleBody.setStrokeStyle(3, 0xffffff, 0.82);
-    const muzzleGlow = this.add.ellipse(207, scaleY(420), 34, 18, 0xfff1a1, 0.94);
-    muzzleGlow.setStrokeStyle(2, 0xffffff, 0.9);
-    const sidePodLeft = this.add.rectangle(193, scaleY(484), 12, 22, 0x275bce, 1);
+    const sidePodLeft = this.add.ellipse(189, scaleY(486), 14, 28, 0x23489d, 0.98);
     sidePodLeft.setStrokeStyle(2, 0xa3ebff, 0.84);
-    const sidePodRight = this.add.rectangle(221, scaleY(484), 12, 22, 0x275bce, 1);
+    const sidePodRight = this.add.ellipse(225, scaleY(486), 14, 28, 0x23489d, 0.98);
     sidePodRight.setStrokeStyle(2, 0xa3ebff, 0.84);
+    const sideFinLeft = this.add.triangle(
+      191,
+      scaleY(468),
+      -10,
+      12,
+      2,
+      -10,
+      8,
+      16,
+      0x5fcfff,
+      0.78
+    );
+    sideFinLeft.setStrokeStyle(2, 0xe9ffff, 0.54);
+    const sideFinRight = this.add.triangle(
+      223,
+      scaleY(468),
+      10,
+      12,
+      -2,
+      -10,
+      -8,
+      16,
+      0x5fcfff,
+      0.78
+    );
+    sideFinRight.setStrokeStyle(2, 0xe9ffff, 0.54);
+    const barrelCore = this.add.ellipse(207, scaleY(454), 20, 68, 0x1ca6ff, 0.98);
+    barrelCore.setStrokeStyle(4, 0xe8ffff, 0.84);
+    const barrelShellLeft = this.add.triangle(
+      198,
+      scaleY(454),
+      -12,
+      12,
+      -4,
+      -24,
+      2,
+      26,
+      0x123f95,
+      0.98
+    );
+    barrelShellLeft.setStrokeStyle(2, 0xaef4ff, 0.82);
+    const barrelShellRight = this.add.triangle(
+      216,
+      scaleY(454),
+      12,
+      12,
+      4,
+      -24,
+      -2,
+      26,
+      0x123f95,
+      0.98
+    );
+    barrelShellRight.setStrokeStyle(2, 0xaef4ff, 0.82);
+    const barrelBandTop = this.add.ellipse(207, scaleY(440), 26, 10, 0xd5fbff, 0.85);
+    barrelBandTop.setStrokeStyle(2, 0xffffff, 0.72);
+    const barrelBandMid = this.add.ellipse(207, scaleY(458), 30, 10, 0x78efff, 0.55);
+    barrelBandMid.setStrokeStyle(2, 0xd9ffff, 0.58);
+    const muzzleBody = this.add.ellipse(207, scaleY(421), 30, 20, 0x0e2d77, 1);
+    muzzleBody.setStrokeStyle(3, 0xffffff, 0.82);
+    const muzzleEmitter = this.add.ellipse(207, scaleY(419), 18, 10, 0xfff3a2, 0.98);
+    muzzleEmitter.setStrokeStyle(2, 0xffffff, 0.86);
+    const muzzleGlow = this.add.ellipse(207, scaleY(414), 38, 22, 0x8cf7ff, 0.28);
+    const muzzleSpikeLeft = this.add.triangle(
+      196,
+      scaleY(420),
+      -12,
+      3,
+      2,
+      -10,
+      4,
+      12,
+      0x1e5dca,
+      0.96
+    );
+    muzzleSpikeLeft.setStrokeStyle(2, 0xcafcff, 0.7);
+    const muzzleSpikeRight = this.add.triangle(
+      218,
+      scaleY(420),
+      12,
+      3,
+      -2,
+      -10,
+      -4,
+      12,
+      0x1e5dca,
+      0.96
+    );
+    muzzleSpikeRight.setStrokeStyle(2, 0xcafcff, 0.7);
     const core = this.add.circle(207, scaleY(516), 9, 0xfff7bf, 0.98);
     const coreHalo = this.add.circle(207, scaleY(516), 18, 0x7ce6ff, 0.22);
 
@@ -173,15 +234,24 @@ export class BattleScene extends Phaser.Scene {
       wingRight,
       coreHalo,
       column,
+      baseSkirt,
       sidePodLeft,
       sidePodRight,
+      sideFinLeft,
+      sideFinRight,
       cannonMount,
+      energyRing,
       cannonJoint,
-      cannonSleeveLeft,
-      cannonSleeveRight,
-      cannonBarrel,
+      barrelShellLeft,
+      barrelShellRight,
+      barrelCore,
+      barrelBandTop,
+      barrelBandMid,
       muzzleBody,
       muzzleGlow,
+      muzzleEmitter,
+      muzzleSpikeLeft,
+      muzzleSpikeRight,
       core
     ]);
   }
@@ -195,8 +265,8 @@ export class BattleScene extends Phaser.Scene {
     const tint = PLANET_BY_ID[this.currentPlanetId].enemyTint;
     this.enemyHalo = this.add.ellipse(207, -80, isBoss ? 74 : 58, isBoss ? 32 : 24, 0x1038a6, 0.2);
 
-    const shadow = this.add.ellipse(0, 44, isBoss ? 56 : 44, isBoss ? 16 : 12, 0x1038a6, 0.24);
-    const body = this.add.ellipse(0, 2, isBoss ? 56 : 44, isBoss ? 64 : 50, tint, 1);
+    const shadow = this.add.ellipse(0, 46, isBoss ? 58 : 46, isBoss ? 18 : 13, 0x1038a6, 0.24);
+    const body = this.add.ellipse(0, 4, isBoss ? 60 : 46, isBoss ? 68 : 54, tint, 1);
     body.setStrokeStyle(4, 0x123a99, 0.95);
     const bodyGloss = this.add.ellipse(
       -(isBoss ? 9 : 7),
@@ -206,60 +276,102 @@ export class BattleScene extends Phaser.Scene {
       0xffffff,
       0.18
     );
-    const band = this.add.rectangle(0, 2, isBoss ? 40 : 32, 12, 0xffd76c, 1);
-    band.setStrokeStyle(2, 0x123a99, 0.22);
-    const bandBolt = this.add.circle(0, 2, isBoss ? 5 : 4, 0x2442a2, 0.96);
-    const cap = this.add.rectangle(0, -(isBoss ? 28 : 22), isBoss ? 20 : 16, 12, 0x5a6fcf, 1);
+    const seam = this.add.ellipse(0, isBoss ? -2 : -1, isBoss ? 50 : 38, isBoss ? 12 : 10, 0x0d2f7a, 0.18);
+    seam.setStrokeStyle(2, 0xb7d2ff, 0.4);
+    const band = this.add.ellipse(0, 6, isBoss ? 46 : 34, isBoss ? 16 : 12, 0xe4eefc, 0.94);
+    band.setStrokeStyle(2, 0x123a99, 0.28);
+    const bandBoltLeft = this.add.circle(-(isBoss ? 12 : 9), 6, isBoss ? 3 : 2.5, 0x2442a2, 0.96);
+    const bandBoltCenter = this.add.circle(0, 6, isBoss ? 4 : 3, 0x2442a2, 0.96);
+    const bandBoltRight = this.add.circle(isBoss ? 12 : 9, 6, isBoss ? 3 : 2.5, 0x2442a2, 0.96);
+    const cap = this.add.ellipse(0, -(isBoss ? 28 : 22), isBoss ? 24 : 18, isBoss ? 16 : 12, 0x566fcb, 1);
     cap.setStrokeStyle(3, 0xffffff, 0.74);
-    const fuseStem = this.add.rectangle(0, -(isBoss ? 39 : 31), 5, isBoss ? 16 : 12, 0x65411d, 1);
+    const neck = this.add.ellipse(0, -(isBoss ? 19 : 15), isBoss ? 18 : 14, isBoss ? 8 : 6, 0x294ca8, 0.92);
+    const fuseStem = this.add.rectangle(0, -(isBoss ? 40 : 31), 5, isBoss ? 16 : 12, 0x65411d, 1);
     fuseStem.setAngle(10);
-    const sparkA = this.add.rectangle(-(isBoss ? 8 : 6), -(isBoss ? 49 : 39), isBoss ? 4 : 3, isBoss ? 14 : 10, 0xfff1a1, 1);
+    const fuseWrap = this.add.rectangle(1, -(isBoss ? 34 : 27), isBoss ? 8 : 6, isBoss ? 6 : 4, 0xb69053, 0.96);
+    fuseWrap.setAngle(14);
+    const sparkA = this.add.rectangle(-(isBoss ? 9 : 7), -(isBoss ? 50 : 39), isBoss ? 4 : 3, isBoss ? 14 : 10, 0xfff1a1, 1);
     sparkA.setAngle(-35);
-    const sparkB = this.add.rectangle(isBoss ? 2 : 1, -(isBoss ? 49 : 39), isBoss ? 4 : 3, isBoss ? 16 : 11, 0xffa65e, 1);
+    const sparkB = this.add.rectangle(isBoss ? 2 : 1, -(isBoss ? 50 : 39), isBoss ? 4 : 3, isBoss ? 16 : 11, 0xffa65e, 1);
     sparkB.setAngle(18);
     const sparkCore = this.add.circle(isBoss ? 8 : 6, -(isBoss ? 48 : 38), isBoss ? 5 : 4, 0xff6f4a, 0.98);
+    const sparkHalo = this.add.circle(isBoss ? 8 : 6, -(isBoss ? 48 : 38), isBoss ? 10 : 8, 0xffb069, 0.18);
     const finLeft = this.add.triangle(
-      -(isBoss ? 22 : 17),
-      isBoss ? 14 : 12,
-      -2,
+      -(isBoss ? 26 : 20),
+      isBoss ? 16 : 13,
+      -4,
       -12,
-      -18,
+      -20,
       0,
       -2,
-      14,
+      16,
       0xe1ecff,
-      0.9
+      0.92
     );
     finLeft.setStrokeStyle(2, 0x123a99, 0.52);
     const finRight = this.add.triangle(
-      isBoss ? 22 : 17,
-      isBoss ? 14 : 12,
-      2,
+      isBoss ? 26 : 20,
+      isBoss ? 16 : 13,
+      4,
       -12,
-      18,
+      20,
       0,
       2,
-      14,
+      16,
       0xe1ecff,
-      0.9
+      0.92
     );
     finRight.setStrokeStyle(2, 0x123a99, 0.52);
-    const bottomCap = this.add.circle(0, isBoss ? 28 : 22, isBoss ? 11 : 9, 0x1c348c, 0.96);
+    const finLeftInner = this.add.triangle(
+      -(isBoss ? 23 : 18),
+      isBoss ? 14 : 12,
+      -2,
+      -8,
+      -12,
+      0,
+      -1,
+      10,
+      0x7cc8ff,
+      0.72
+    );
+    const finRightInner = this.add.triangle(
+      isBoss ? 23 : 18,
+      isBoss ? 14 : 12,
+      2,
+      -8,
+      12,
+      0,
+      1,
+      10,
+      0x7cc8ff,
+      0.72
+    );
+    const bottomCap = this.add.ellipse(0, isBoss ? 30 : 24, isBoss ? 20 : 15, isBoss ? 13 : 10, 0x1c348c, 0.96);
+    const bottomBolt = this.add.circle(0, isBoss ? 30 : 24, isBoss ? 4 : 3, 0xffd76c, 0.94);
 
     this.enemy = this.add.container(207, -80, [
       shadow,
       body,
       bodyGloss,
+      seam,
       band,
-      bandBolt,
+      bandBoltLeft,
+      bandBoltCenter,
+      bandBoltRight,
       cap,
+      neck,
       fuseStem,
+      fuseWrap,
+      sparkHalo,
       sparkA,
       sparkB,
       sparkCore,
       finLeft,
       finRight,
+      finLeftInner,
+      finRightInner,
       bottomCap,
+      bottomBolt,
     ]);
 
     this.enemyHalo.setDepth(3);

@@ -1,0 +1,67 @@
+<svg width="360" height="320" viewBox="0 0 360 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="180" y1="24" x2="180" y2="320" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F1D4B"/>
+      <stop offset="1" stop-color="#04112D"/>
+    </linearGradient>
+    <linearGradient id="platform" x1="96" y1="0" x2="264" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E7F9FF"/>
+      <stop offset="1" stop-color="#B7ECFF"/>
+    </linearGradient>
+    <linearGradient id="cannonBody" x1="180" y1="112" x2="180" y2="248" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#74EDFF"/>
+      <stop offset="0.48" stop-color="#1FA5FF"/>
+      <stop offset="1" stop-color="#0D367F"/>
+    </linearGradient>
+    <linearGradient id="shell" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#2E73E8"/>
+      <stop offset="1" stop-color="#0F327B"/>
+    </linearGradient>
+    <radialGradient id="muzzleGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(180 94) rotate(90) scale(28 44)">
+      <stop stop-color="#FFF9B4" stop-opacity="0.95"/>
+      <stop offset="0.55" stop-color="#91F6FF" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#91F6FF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="coreGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(180 244) rotate(90) scale(34 34)">
+      <stop stop-color="#E8FEFF" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#7DE6FF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="360" height="320" rx="28" fill="url(#bg)"/>
+  <circle cx="286" cy="58" r="42" fill="#FFFFFF" fill-opacity="0.08"/>
+  <circle cx="78" cy="84" r="28" fill="#FFFFFF" fill-opacity="0.06"/>
+
+  <ellipse cx="180" cy="264" rx="74" ry="42" fill="#59D6FF" fill-opacity="0.14"/>
+  <ellipse cx="180" cy="284" rx="62" ry="10" fill="#7AB9FF" fill-opacity="0.18"/>
+  <rect x="96" y="264" width="168" height="24" rx="12" fill="url(#platform)" stroke="#92DFFF" stroke-width="4"/>
+
+  <path d="M133 258L165 246V270L133 258Z" fill="#31A9FF" fill-opacity="0.92" stroke="#FFFFFF" stroke-opacity="0.65" stroke-width="3"/>
+  <path d="M227 258L195 246V270L227 258Z" fill="#31A9FF" fill-opacity="0.92" stroke="#FFFFFF" stroke-opacity="0.65" stroke-width="3"/>
+
+  <circle cx="180" cy="244" r="34" fill="url(#coreGlow)"/>
+  <rect x="164" y="206" width="32" height="54" rx="12" fill="#2B8CFF" stroke="#FFFFFF" stroke-opacity="0.72" stroke-width="4"/>
+  <ellipse cx="180" cy="220" rx="40" ry="18" fill="#14357F" fill-opacity="0.96" stroke="#8FE8FF" stroke-opacity="0.72" stroke-width="4"/>
+  <ellipse cx="180" cy="202" rx="30" ry="18" fill="#204FB0" stroke="#A9F2FF" stroke-opacity="0.88" stroke-width="4"/>
+  <circle cx="180" cy="202" r="14" fill="#9CF6FF" fill-opacity="0.18" stroke="#C8FBFF" stroke-opacity="0.88" stroke-width="4"/>
+  <circle cx="180" cy="194" r="9" fill="#FFD97D" fill-opacity="0.98" stroke="#FFFFFF" stroke-opacity="0.82" stroke-width="2"/>
+
+  <ellipse cx="154" cy="206" rx="12" ry="24" fill="#23489D" fill-opacity="0.98" stroke="#A3EBFF" stroke-opacity="0.84" stroke-width="2"/>
+  <ellipse cx="206" cy="206" rx="12" ry="24" fill="#23489D" fill-opacity="0.98" stroke="#A3EBFF" stroke-opacity="0.84" stroke-width="2"/>
+  <path d="M146 194L158 178L162 210L146 204V194Z" fill="#5FCFFF" fill-opacity="0.78" stroke="#E9FFFF" stroke-opacity="0.54" stroke-width="2"/>
+  <path d="M214 194L202 178L198 210L214 204V194Z" fill="#5FCFFF" fill-opacity="0.78" stroke="#E9FFFF" stroke-opacity="0.54" stroke-width="2"/>
+
+  <path d="M169 188L191 188L195 102L165 102L169 188Z" fill="url(#cannonBody)" stroke="#E8FFFF" stroke-opacity="0.84" stroke-width="4"/>
+  <path d="M166 190L154 200L160 110L171 90L172 194L166 190Z" fill="url(#shell)" stroke="#AEF4FF" stroke-opacity="0.82" stroke-width="2"/>
+  <path d="M194 190L206 200L200 110L189 90L188 194L194 190Z" fill="url(#shell)" stroke="#AEF4FF" stroke-opacity="0.82" stroke-width="2"/>
+  <ellipse cx="180" cy="148" rx="20" ry="6" fill="#D5FBFF" fill-opacity="0.85" stroke="#FFFFFF" stroke-opacity="0.72" stroke-width="2"/>
+  <ellipse cx="180" cy="170" rx="24" ry="7" fill="#78EFFF" fill-opacity="0.55" stroke="#D9FFFF" stroke-opacity="0.58" stroke-width="2"/>
+
+  <ellipse cx="180" cy="120" rx="26" ry="16" fill="#0E2D77" stroke="#FFFFFF" stroke-opacity="0.82" stroke-width="3"/>
+  <ellipse cx="180" cy="114" rx="44" ry="28" fill="url(#muzzleGlow)"/>
+  <ellipse cx="180" cy="118" rx="14" ry="7" fill="#FFF3A2" fill-opacity="0.98" stroke="#FFFFFF" stroke-opacity="0.86" stroke-width="2"/>
+  <path d="M158 121L170 108L172 132L158 128V121Z" fill="#1E5DCA" fill-opacity="0.96" stroke="#CAFCFF" stroke-opacity="0.7" stroke-width="2"/>
+  <path d="M202 121L190 108L188 132L202 128V121Z" fill="#1E5DCA" fill-opacity="0.96" stroke="#CAFCFF" stroke-opacity="0.7" stroke-width="2"/>
+
+  <circle cx="180" cy="244" r="10" fill="#FFF7BF" fill-opacity="0.98"/>
+</svg>
