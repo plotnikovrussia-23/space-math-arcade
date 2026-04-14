@@ -24,6 +24,13 @@ export function HomeScreen() {
   const startModeSelection = useGameStore((state) => state.startModeSelection);
   const openSettings = useGameStore((state) => state.openSettings);
   const unlockAudio = useGameStore((state) => state.unlockAudio);
+  const selectedPlanetId = useGameStore((state) => state.selectedPlanetId);
+  const responseWindowLevel = useGameStore((state) => state.responseWindowLevel);
+  const setResponseWindowLevel = useGameStore((state) => state.setResponseWindowLevel);
+  const responseWindowMs = QUESTION_TIME_LIMIT_MS(
+    selectedPlanetId,
+    responseWindowLevel
+  );
 
   return (
     <section className="screen home-screen">
@@ -48,6 +55,42 @@ export function HomeScreen() {
             Настройки звука
           </button>
         </div>
+      </div>
+      <div className="response-tuning-panel home-response-tuning">
+        <div className="response-tuning-copy">
+          <strong>Сложность по времени</strong>
+          <span>
+            Уровень {responseWindowLevel} · {responseWindowMs} мс на ответ
+          </span>
+        </div>
+        <input
+          className="response-tuning-slider"
+          type="range"
+          min={1}
+          max={6}
+          step={1}
+          value={responseWindowLevel}
+          onChange={(event) =>
+            setResponseWindowLevel(Number(event.target.value) as ResponseWindowLevel)
+          }
+          aria-label="Уровень скорости падения"
+          list="response-window-levels"
+        />
+        <div className="response-tuning-labels" aria-hidden="true">
+          {RESPONSE_WINDOW_LEVELS.map((level) => (
+            <span
+              key={level}
+              className={level === responseWindowLevel ? "is-active" : undefined}
+            >
+              {level}
+            </span>
+          ))}
+        </div>
+        <datalist id="response-window-levels">
+          {RESPONSE_WINDOW_LEVELS.map((level) => (
+            <option key={level} value={level} />
+          ))}
+        </datalist>
       </div>
       <div className="info-strip">
         <div>
@@ -180,8 +223,6 @@ export function PlanetMapScreen() {
 export function BattleScreen() {
   const battle = useGameStore((state) => state.battle);
   const submitAnswer = useGameStore((state) => state.submitAnswer);
-  const responseWindowLevel = useGameStore((state) => state.responseWindowLevel);
-  const setResponseWindowLevel = useGameStore((state) => state.setResponseWindowLevel);
 
   if (!battle) {
     return null;
@@ -191,10 +232,6 @@ export function BattleScreen() {
   const planet = PLANET_BY_ID[battle.planetId];
   const streakLabel = getStreakLabel(battle.streak);
   const banner = getBannerText(battle);
-  const responseWindowMs = QUESTION_TIME_LIMIT_MS(
-    battle.planetId,
-    responseWindowLevel
-  );
 
   return (
     <section className="screen battle-screen">
@@ -216,43 +253,6 @@ export function BattleScreen() {
             Оружие: {["Базовый лазер", "Двойной лазер", "Плазма", "Суперлуч"][battle.weaponLevel]}
           </span>
         </div>
-      </div>
-
-      <div className="response-tuning-panel">
-        <div className="response-tuning-copy">
-          <strong>Скорость падения</strong>
-          <span>
-            Уровень {responseWindowLevel} · {responseWindowMs} мс на ответ
-          </span>
-        </div>
-        <input
-          className="response-tuning-slider"
-          type="range"
-          min={1}
-          max={6}
-          step={1}
-          value={responseWindowLevel}
-          onChange={(event) =>
-            setResponseWindowLevel(Number(event.target.value) as ResponseWindowLevel)
-          }
-          aria-label="Время на ответ"
-          list="response-window-levels"
-        />
-        <div className="response-tuning-labels" aria-hidden="true">
-          {RESPONSE_WINDOW_LEVELS.map((level) => (
-            <span
-              key={level}
-              className={level === responseWindowLevel ? "is-active" : undefined}
-            >
-              {level}
-            </span>
-          ))}
-        </div>
-        <datalist id="response-window-levels">
-          {RESPONSE_WINDOW_LEVELS.map((level) => (
-            <option key={level} value={level} />
-          ))}
-        </datalist>
       </div>
 
       <div className="battle-panel">
