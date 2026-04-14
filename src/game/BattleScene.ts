@@ -2,6 +2,11 @@ import Phaser from "phaser";
 import { PLANET_BY_ID } from "../config/planets";
 import type { PlanetId, QuestionOutcome } from "../types";
 
+const SCENE_WIDTH = 414;
+const SCENE_HEIGHT = 500;
+const BASE_SCENE_HEIGHT = 620;
+const scaleY = (value: number) => (value / BASE_SCENE_HEIGHT) * SCENE_HEIGHT;
+
 export interface SceneQuestionPayload {
   questionId: string;
   questionIndex: number;
@@ -34,7 +39,7 @@ export class BattleScene extends Phaser.Scene {
   private enemyStartX = 207;
   private enemyStartY = -80;
   private enemyTargetX = 207;
-  private enemyTargetY = 470;
+  private enemyTargetY = scaleY(470);
 
   constructor() {
     super("BattleScene");
@@ -70,7 +75,7 @@ export class BattleScene extends Phaser.Scene {
     for (let index = 0; index < 24; index += 1) {
       const star = this.add.circle(
         Phaser.Math.Between(24, 390),
-        Phaser.Math.Between(20, 580),
+        Phaser.Math.Between(20, Math.round(scaleY(580))),
         Phaser.Math.Between(1, 3),
         0xffffff,
         0.7
@@ -87,24 +92,46 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private createStation() {
-    const glow = this.add.ellipse(207, 542, 132, 84, 0x59d6ff, 0.12);
-    const platform = this.add.rectangle(207, 556, 138, 26, 0xe8f7ff, 0.96);
+    const glow = this.add.ellipse(207, scaleY(542), 132, 84, 0x59d6ff, 0.12);
+    const platform = this.add.rectangle(207, scaleY(556), 138, 26, 0xe8f7ff, 0.96);
     platform.setStrokeStyle(4, 0x92dfff, 0.9);
-    const shadow = this.add.ellipse(207, 566, 114, 18, 0x7ab9ff, 0.18);
-    const wingLeft = this.add.triangle(170, 548, -26, 0, 10, -14, 10, 14, 0x31a9ff, 0.92);
+    const shadow = this.add.ellipse(207, scaleY(566), 114, 18, 0x7ab9ff, 0.18);
+    const wingLeft = this.add.triangle(
+      170,
+      scaleY(548),
+      -26,
+      0,
+      10,
+      -14,
+      10,
+      14,
+      0x31a9ff,
+      0.92
+    );
     wingLeft.setStrokeStyle(3, 0xffffff, 0.65);
-    const wingRight = this.add.triangle(244, 548, 26, 0, -10, -14, -10, 14, 0x31a9ff, 0.92);
+    const wingRight = this.add.triangle(
+      244,
+      scaleY(548),
+      26,
+      0,
+      -10,
+      -14,
+      -10,
+      14,
+      0x31a9ff,
+      0.92
+    );
     wingRight.setStrokeStyle(3, 0xffffff, 0.65);
-    const column = this.add.rectangle(207, 522, 24, 54, 0x2b8cff, 1);
+    const column = this.add.rectangle(207, scaleY(522), 24, 54, 0x2b8cff, 1);
     column.setStrokeStyle(4, 0xffffff, 0.72);
-    const cannonBase = this.add.rectangle(207, 488, 46, 20, 0x163b9f, 1);
+    const cannonBase = this.add.rectangle(207, scaleY(488), 46, 20, 0x163b9f, 1);
     cannonBase.setStrokeStyle(3, 0x8ee6ff, 0.9);
-    const cannon = this.add.rectangle(207, 462, 16, 52, 0x2fe1ff, 1);
+    const cannon = this.add.rectangle(207, scaleY(462), 16, 52, 0x2fe1ff, 1);
     cannon.setStrokeStyle(4, 0xffffff, 0.92);
-    const muzzle = this.add.rectangle(207, 440, 28, 12, 0xfff6a0, 0.98);
+    const muzzle = this.add.rectangle(207, scaleY(440), 28, 12, 0xfff6a0, 0.98);
     muzzle.setStrokeStyle(2, 0xffffff, 0.92);
-    const core = this.add.circle(207, 520, 10, 0xfff7bf, 0.98);
-    const coreHalo = this.add.circle(207, 520, 22, 0x7ce6ff, 0.22);
+    const core = this.add.circle(207, scaleY(520), 10, 0xfff7bf, 0.98);
+    const coreHalo = this.add.circle(207, scaleY(520), 22, 0x7ce6ff, 0.22);
 
     this.station = this.add.container(0, 0, [
       glow,
@@ -158,11 +185,11 @@ export class BattleScene extends Phaser.Scene {
       Phaser.Display.Color.HexStringToColor(bottom).color,
       1
     );
-    this.background.fillRect(0, 0, 414, 620);
+    this.background.fillRect(0, 0, SCENE_WIDTH, SCENE_HEIGHT);
     this.background.fillStyle(0xffffff, 0.18);
     this.background.fillCircle(332, 88, 70);
     this.background.fillStyle(0xffffff, 0.12);
-    this.background.fillCircle(82, 120, 50);
+    this.background.fillCircle(82, scaleY(120), 50);
   }
 
   presentQuestion(payload: SceneQuestionPayload) {
@@ -177,9 +204,9 @@ export class BattleScene extends Phaser.Scene {
     this.createEnemy(payload.isBoss);
 
     this.enemyStartX = Phaser.Math.Between(120, 294);
-    this.enemyStartY = 112;
+    this.enemyStartY = scaleY(112);
     this.enemyTargetX = 207;
-    this.enemyTargetY = 450;
+    this.enemyTargetY = scaleY(450);
     this.enemyApproachStartTime = this.time.now;
     this.enemyApproachDuration = payload.timeLimitMs;
     this.enemyApproachActive = true;
@@ -227,7 +254,7 @@ export class BattleScene extends Phaser.Scene {
 
     this.beam.lineStyle(10 + this.weaponLevel * 4, beamColor, 0.95);
     this.beam.beginPath();
-    this.beam.moveTo(207, 496);
+    this.beam.moveTo(207, scaleY(496));
     this.beam.lineTo(this.enemy.x, this.enemy.y);
     this.beam.strokePath();
 
@@ -278,13 +305,13 @@ export class BattleScene extends Phaser.Scene {
         this.enemyPupil
       ],
       x: 207,
-      y: 506,
+      y: scaleY(506),
       duration: 220,
       ease: "Quad.easeIn",
       onComplete: () => {
         this.cameras.main.shake(260, 0.012);
         this.cameras.main.flash(180, 255, 96, 96, true);
-        const impact = this.add.circle(207, 520, 26, 0xff6f6f, 0.45);
+        const impact = this.add.circle(207, scaleY(520), 26, 0xff6f6f, 0.45);
         this.tweens.add({
           targets: impact,
           scale: 4,

@@ -208,6 +208,9 @@ export function BattleScreen() {
           <span>
             Враг {battle.currentQuestionIndex + 1} / {battle.questions.length}
           </span>
+          <span className="battle-weapon">
+            Оружие: {["Базовый лазер", "Двойной лазер", "Плазма", "Суперлуч"][battle.weaponLevel]}
+          </span>
         </div>
       </div>
 
@@ -225,13 +228,6 @@ export function BattleScreen() {
           <div className={`feedback-banner ${battle.currentOutcome ? "is-visible" : ""}`}>
             {banner}
           </div>
-        </div>
-      </div>
-
-      <div className="weapon-panel">
-        <span>Оружие: {["Базовый лазер", "Двойной лазер", "Плазма", "Суперлуч"][battle.weaponLevel]}</span>
-        <div className="charge-bar">
-          <div style={{ width: `${Math.min(100, (battle.streak / 8) * 100)}%` }} />
         </div>
       </div>
 

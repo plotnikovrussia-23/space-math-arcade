@@ -22,7 +22,7 @@ export function PhaserBattle() {
     const game = new Phaser.Game({
       type: Phaser.AUTO,
       width: 414,
-      height: 620,
+      height: 500,
       parent: containerRef.current,
       transparent: true,
       backgroundColor: "#00000000",
