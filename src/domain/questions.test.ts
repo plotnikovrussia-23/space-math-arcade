@@ -29,6 +29,7 @@ describe("generateMissionQuestions", () => {
       expect(new Set(question.options).size).toBe(4);
       expect(question.spokenRevealText.toLowerCase()).toContain("равно");
       expect(question.spokenRevealText).toContain("Ответ");
+      expect(question.spokenAnswerText.length).toBeGreaterThan(0);
     }
   });
 });

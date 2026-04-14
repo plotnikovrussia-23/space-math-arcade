@@ -7,6 +7,9 @@ type SpeakOptions = {
   rate?: number;
   pitch?: number;
 };
+type SpeakSequenceOptions = SpeakOptions & {
+  betweenPartsDelayMs?: number;
+};
 
 class AudioDirector {
   private audioContext: AudioContext | null = null;
@@ -280,6 +283,36 @@ class AudioDirector {
 
       window.speechSynthesis.speak(utterance);
     });
+  }
+
+  async speakSequenceAndWait(
+    parts: string[],
+    options: SpeakSequenceOptions = {}
+  ) {
+    const filteredParts = parts.map((part) => part.trim()).filter(Boolean);
+
+    if (filteredParts.length === 0) {
+      return;
+    }
+
+    const betweenPartsDelayMs = options.betweenPartsDelayMs ?? 280;
+
+    for (let index = 0; index < filteredParts.length; index += 1) {
+      const isLastPart = index === filteredParts.length - 1;
+
+      await this.speakAndWait(filteredParts[index], {
+        minimumDurationMs: isLastPart ? options.minimumDurationMs : 0,
+        postSpeechDelayMs: isLastPart ? options.postSpeechDelayMs : 0,
+        rate: options.rate,
+        pitch: options.pitch
+      });
+
+      if (!isLastPart && betweenPartsDelayMs > 0) {
+        await new Promise<void>((resolve) => {
+          window.setTimeout(resolve, betweenPartsDelayMs);
+        });
+      }
+    }
   }
 }
 

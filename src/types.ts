@@ -63,6 +63,7 @@ export interface Question {
   spokenText: string;
   revealText: string;
   spokenRevealText: string;
+  spokenAnswerText: string;
   correctAnswer: number;
   options: number[];
   planetId: PlanetId;

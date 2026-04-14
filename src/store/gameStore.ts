@@ -39,7 +39,7 @@ const initialCompletedPlanetIndex: Record<GameMode, number> = {
   galactic: -1
 };
 
-const SUCCESS_REVEAL_MIN_DELAY_MS = 6200;
+const SUCCESS_REVEAL_MIN_DELAY_MS = 6800;
 const FAILURE_REVEAL_DELAY_MS = 840;
 
 let timeoutHandle: number | null = null;
@@ -421,12 +421,20 @@ const submitBattleAnswer = (
       audioDirector.playSfx("upgrade");
     }
     void audioDirector
-      .speakAndWait(question.spokenRevealText, {
+      .speakSequenceAndWait(
+        [
+          question.spokenText,
+          `равно ${question.spokenAnswerText}`,
+          `ответ ${question.spokenAnswerText}`
+        ],
+        {
         minimumDurationMs: SUCCESS_REVEAL_MIN_DELAY_MS,
-        postSpeechDelayMs: 1500,
-        rate: 0.78,
+        postSpeechDelayMs: 1800,
+        betweenPartsDelayMs: 420,
+        rate: 0.74,
         pitch: 1
-      })
+      }
+      )
       .then(() => {
         resolveOutcomeAndContinue(set, get, currentOutcome.id);
       });

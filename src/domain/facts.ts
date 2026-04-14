@@ -95,6 +95,7 @@ export const formatPrompt = (
   | "correctAnswer"
   | "revealText"
   | "spokenRevealText"
+  | "spokenAnswerText"
   | "promptId"
 > => {
   const aWords = numberToWordsRu(family.a);
@@ -108,6 +109,7 @@ export const formatPrompt = (
       correctAnswer: family.product,
       revealText: `${family.a} × ${family.b} = ${family.product}`,
       spokenRevealText: `${aWords} умножить на ${bWords}. Равно ${productWords}. Ответ ${productWords}.`,
+      spokenAnswerText: productWords,
       promptId: `${family.id}:multiply`
     };
   }
@@ -119,6 +121,7 @@ export const formatPrompt = (
       correctAnswer: family.b,
       revealText: `${family.product} ÷ ${family.a} = ${family.b}`,
       spokenRevealText: `${productWords} разделить на ${aWords}. Равно ${bWords}. Ответ ${bWords}.`,
+      spokenAnswerText: bWords,
       promptId: `${family.id}:divideByA`
     };
   }
@@ -129,6 +132,7 @@ export const formatPrompt = (
     correctAnswer: family.a,
     revealText: `${family.product} ÷ ${family.b} = ${family.a}`,
     spokenRevealText: `${productWords} разделить на ${bWords}. Равно ${aWords}. Ответ ${aWords}.`,
+    spokenAnswerText: aWords,
     promptId: `${family.id}:divideByB`
   };
 };

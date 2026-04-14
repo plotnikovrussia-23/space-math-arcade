@@ -19,6 +19,7 @@ describe("facts", () => {
       spokenText: "сорок два разделить на шесть",
       correctAnswer: 7,
       revealText: "42 ÷ 6 = 7",
+      spokenAnswerText: "семь",
       spokenRevealText:
         "сорок два разделить на шесть. Равно семь. Ответ семь."
     });
@@ -27,6 +28,7 @@ describe("facts", () => {
       spokenText: "сорок два разделить на семь",
       correctAnswer: 6,
       revealText: "42 ÷ 7 = 6",
+      spokenAnswerText: "шесть",
       spokenRevealText:
         "сорок два разделить на семь. Равно шесть. Ответ шесть."
     });
