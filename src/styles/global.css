@@ -352,8 +352,8 @@ button {
 .battle-screen {
   flex: 1 1 auto;
   min-height: 0;
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
+  display: flex;
+  flex-direction: column;
   gap: 12px;
 }
 
@@ -406,11 +406,13 @@ button {
   position: relative;
   overflow: hidden;
   flex: 1 1 auto;
-  min-height: 0;
+  min-height: 260px;
   border-radius: 28px;
   background: rgba(255, 255, 255, 0.32);
   padding: 8px;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.44);
+  display: flex;
+  flex-direction: column;
 }
 
 .status-ribbon {
@@ -432,8 +434,9 @@ button {
 
 .battle-canvas {
   width: 100%;
-  height: min(36dvh, 240px);
-  min-height: 0;
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 220px;
   display: flex;
   align-items: stretch;
   overflow: hidden;
@@ -695,11 +698,9 @@ button {
 }
 
 .question-panel {
-  position: absolute;
-  inset: auto 16px 18px 16px;
+  display: grid;
   display: grid;
   gap: 10px;
-  z-index: 2;
 }
 
 .formula,
@@ -708,6 +709,7 @@ button {
   background: rgba(255, 255, 255, 0.88);
   padding: 12px 16px;
   text-align: center;
+  box-shadow: 0 10px 20px rgba(16, 56, 166, 0.1);
 }
 
 .formula {

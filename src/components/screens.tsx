@@ -218,13 +218,14 @@ export function BattleScreen() {
           <strong>{streakLabel || "БОЕВАЯ ГОТОВНОСТЬ"}</strong>
         </div>
         <PhaserBattle />
-        <div className="question-panel">
-          <div className="formula">
-            {battle.currentOutcome?.revealText ?? question?.text ?? "Готовься"}
-          </div>
-          <div className={`feedback-banner ${battle.currentOutcome ? "is-visible" : ""}`}>
-            {banner}
-          </div>
+      </div>
+
+      <div className="question-panel">
+        <div className="formula">
+          {battle.currentOutcome?.revealText ?? question?.text ?? "Готовься"}
+        </div>
+        <div className={`feedback-banner ${battle.currentOutcome ? "is-visible" : ""}`}>
+          {banner}
         </div>
       </div>
 
