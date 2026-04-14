@@ -4,6 +4,7 @@ import type {
   GameMode,
   PlanetId,
   QuestionOutcome,
+  ResponseWindowLevel,
   ResultSummary,
   SpeedClass
 } from "../types";
@@ -11,8 +12,25 @@ import { generateMissionQuestions } from "./questions";
 
 export const MAX_SHIELD = 5;
 
-export const QUESTION_TIME_LIMIT_MS = (planetId: PlanetId) =>
-  PLANET_BY_ID[planetId].questionTimeMs;
+export const RESPONSE_WINDOW_LEVELS: ResponseWindowLevel[] = [1, 2, 3, 4, 5, 6];
+
+const RESPONSE_WINDOW_MULTIPLIER: Record<ResponseWindowLevel, number> = {
+  1: 0.72,
+  2: 0.86,
+  3: 1,
+  4: 1.18,
+  5: 1.38,
+  6: 1.62
+};
+
+export const QUESTION_TIME_LIMIT_MS = (
+  planetId: PlanetId,
+  responseWindowLevel: ResponseWindowLevel = 3
+) =>
+  Math.round(
+    PLANET_BY_ID[planetId].questionTimeMs *
+      RESPONSE_WINDOW_MULTIPLIER[responseWindowLevel]
+  );
 
 export const classifyResponse = (
   responseTimeMs: number,

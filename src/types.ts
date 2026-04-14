@@ -31,6 +31,7 @@ export type PlanetId =
 export type PromptType = "multiply" | "divideByA" | "divideByB";
 
 export type SpeedClass = "instant" | "good" | "slow" | "timeout" | "wrong";
+export type ResponseWindowLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
 export type QuestionDifficulty = "warmup" | "mid" | "tense" | "boss";
 

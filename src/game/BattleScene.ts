@@ -3,9 +3,9 @@ import { PLANET_BY_ID } from "../config/planets";
 import type { PlanetId, QuestionOutcome } from "../types";
 
 const SCENE_WIDTH = 414;
-const SCENE_HEIGHT = 500;
+const SCENE_HEIGHT = 560;
 const BASE_SCENE_HEIGHT = 620;
-const SCENE_COMPACT_SCALE = 0.86;
+const SCENE_COMPACT_SCALE = 0.96;
 const scaleY = (value: number) => (value / BASE_SCENE_HEIGHT) * SCENE_HEIGHT;
 
 export interface SceneQuestionPayload {
@@ -37,7 +37,7 @@ export class BattleScene extends Phaser.Scene {
   private enemyStartX = 207;
   private enemyStartY = -80;
   private enemyTargetX = 207;
-  private enemyTargetY = scaleY(430);
+  private enemyTargetY = scaleY(410);
 
   constructor() {
     super("BattleScene");
@@ -233,9 +233,9 @@ export class BattleScene extends Phaser.Scene {
     this.createEnemy(payload.isBoss);
 
     this.enemyStartX = Phaser.Math.Between(120, 294);
-    this.enemyStartY = scaleY(112);
+    this.enemyStartY = scaleY(96);
     this.enemyTargetX = 207;
-    this.enemyTargetY = scaleY(420);
+    this.enemyTargetY = scaleY(398);
     this.enemyApproachStartTime = this.time.now;
     this.enemyApproachDuration = payload.timeLimitMs;
     this.enemyApproachActive = true;
@@ -283,7 +283,7 @@ export class BattleScene extends Phaser.Scene {
 
     this.beam.lineStyle(10 + this.weaponLevel * 4, beamColor, 0.95);
     this.beam.beginPath();
-    this.beam.moveTo(207, scaleY(496));
+    this.beam.moveTo(207, scaleY(474));
     this.beam.lineTo(this.enemy.x, this.enemy.y);
     this.beam.strokePath();
 
@@ -319,13 +319,13 @@ export class BattleScene extends Phaser.Scene {
     this.tweens.add({
       targets: [this.enemyHalo, this.enemy],
       x: 207,
-      y: scaleY(480),
+      y: scaleY(456),
       duration: 220,
       ease: "Quad.easeIn",
       onComplete: () => {
         this.cameras.main.shake(260, 0.012);
         this.cameras.main.flash(180, 255, 96, 96, true);
-        const impact = this.add.circle(207, scaleY(500), 22, 0xff6f6f, 0.45);
+        const impact = this.add.circle(207, scaleY(474), 22, 0xff6f6f, 0.45);
         this.tweens.add({
           targets: impact,
           scale: 4,

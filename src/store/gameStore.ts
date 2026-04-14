@@ -19,6 +19,7 @@ import type {
   FactMastery,
   GameMode,
   PlanetId,
+  ResponseWindowLevel,
   ResultSummary,
   UIScreen
 } from "../types";
@@ -116,6 +117,7 @@ interface GameStore {
   settingsOpen: boolean;
   selectedMode: GameMode | null;
   selectedPlanetId: PlanetId;
+  responseWindowLevel: ResponseWindowLevel;
   audioSettings: AudioSettings;
   mastery: Record<string, FactMastery>;
   recentPromptIds: string[];
@@ -128,6 +130,7 @@ interface GameStore {
   openSettings: () => void;
   closeSettings: () => void;
   toggleAudio: (channel: keyof AudioSettings) => void;
+  setResponseWindowLevel: (level: ResponseWindowLevel) => void;
   goHome: () => void;
   startModeSelection: () => void;
   selectMode: (mode: GameMode) => void;
@@ -185,13 +188,15 @@ const beginBattle = (
 };
 
 const scheduleQuestionTimeout = (planetId: PlanetId, submitTimeout: () => void) => {
+  const { responseWindowLevel } = useGameStore.getState();
+
   if (typeof window === "undefined") {
     return;
   }
 
   timeoutHandle = window.setTimeout(
     submitTimeout,
-    QUESTION_TIME_LIMIT_MS(planetId) + 40
+    QUESTION_TIME_LIMIT_MS(planetId, responseWindowLevel) + 40
   );
 };
 
@@ -279,6 +284,7 @@ export const useGameStore = create<GameStore>()(
       settingsOpen: false,
       selectedMode: null,
       selectedPlanetId: PLANETS[0].id,
+      responseWindowLevel: 3,
       audioSettings: defaultAudioSettings,
       mastery: {},
       recentPromptIds: [],
@@ -303,6 +309,31 @@ export const useGameStore = create<GameStore>()(
 
         audioDirector.updateSettings(audioSettings);
         set({ audioSettings });
+      },
+      setResponseWindowLevel: (level) => {
+        set({ responseWindowLevel: level });
+
+        const battle = get().battle;
+
+        if (!battle || battle.phase !== "questionActive") {
+          return;
+        }
+
+        clearHandles();
+        const question = battle.questions[battle.currentQuestionIndex];
+
+        timeoutHandle = window.setTimeout(() => {
+          const snapshot = get();
+
+          if (
+            snapshot.battle &&
+            snapshot.battle.phase === "questionActive" &&
+            snapshot.battle.questions[snapshot.battle.currentQuestionIndex]?.id ===
+              question.id
+          ) {
+            submitBattleAnswer(set, get, null);
+          }
+        }, Math.max(QUESTION_TIME_LIMIT_MS(battle.planetId, level) - (performance.now() - battle.questionStartedAt), 40));
       },
       goHome: () => {
         clearHandles();
@@ -380,7 +411,7 @@ export const useGameStore = create<GameStore>()(
     }),
     {
       name: "space-math-arcade-storage",
-      version: 1,
+      version: 2,
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         audioSettings: state.audioSettings,
@@ -389,7 +420,8 @@ export const useGameStore = create<GameStore>()(
         unlockedPlanetIndex: state.unlockedPlanetIndex,
         completedPlanetIndex: state.completedPlanetIndex,
         selectedMode: state.selectedMode,
-        selectedPlanetId: state.selectedPlanetId
+        selectedPlanetId: state.selectedPlanetId,
+        responseWindowLevel: state.responseWindowLevel
       }),
       onRehydrateStorage: () => (state) => {
         if (state) {
@@ -417,7 +449,7 @@ const submitBattleAnswer = (
   const question = battle.questions[battle.currentQuestionIndex];
   const responseTimeMs =
     answer === null
-      ? QUESTION_TIME_LIMIT_MS(battle.planetId) + 1
+      ? QUESTION_TIME_LIMIT_MS(battle.planetId, state.responseWindowLevel) + 1
       : performance.now() - battle.questionStartedAt;
 
   const rawStatus =

@@ -1,8 +1,8 @@
 import { PLANETS, PLANET_BY_ID, getPlanetIndex } from "../config/planets";
-import { getStreakLabel } from "../domain/session";
+import { QUESTION_TIME_LIMIT_MS, RESPONSE_WINDOW_LEVELS, getStreakLabel } from "../domain/session";
 import { PhaserBattle } from "./PhaserBattle";
 import { getBannerText, getCurrentQuestion, useGameStore } from "../store/gameStore";
-import type { GameMode, PlanetId } from "../types";
+import type { GameMode, PlanetId, ResponseWindowLevel } from "../types";
 
 const modeMeta: Record<
   GameMode,
@@ -180,6 +180,8 @@ export function PlanetMapScreen() {
 export function BattleScreen() {
   const battle = useGameStore((state) => state.battle);
   const submitAnswer = useGameStore((state) => state.submitAnswer);
+  const responseWindowLevel = useGameStore((state) => state.responseWindowLevel);
+  const setResponseWindowLevel = useGameStore((state) => state.setResponseWindowLevel);
 
   if (!battle) {
     return null;
@@ -189,6 +191,10 @@ export function BattleScreen() {
   const planet = PLANET_BY_ID[battle.planetId];
   const streakLabel = getStreakLabel(battle.streak);
   const banner = getBannerText(battle);
+  const responseWindowMs = QUESTION_TIME_LIMIT_MS(
+    battle.planetId,
+    responseWindowLevel
+  );
 
   return (
     <section className="screen battle-screen">
@@ -210,6 +216,43 @@ export function BattleScreen() {
             Оружие: {["Базовый лазер", "Двойной лазер", "Плазма", "Суперлуч"][battle.weaponLevel]}
           </span>
         </div>
+      </div>
+
+      <div className="response-tuning-panel">
+        <div className="response-tuning-copy">
+          <strong>Скорость падения</strong>
+          <span>
+            Уровень {responseWindowLevel} · {responseWindowMs} мс на ответ
+          </span>
+        </div>
+        <input
+          className="response-tuning-slider"
+          type="range"
+          min={1}
+          max={6}
+          step={1}
+          value={responseWindowLevel}
+          onChange={(event) =>
+            setResponseWindowLevel(Number(event.target.value) as ResponseWindowLevel)
+          }
+          aria-label="Время на ответ"
+          list="response-window-levels"
+        />
+        <div className="response-tuning-labels" aria-hidden="true">
+          {RESPONSE_WINDOW_LEVELS.map((level) => (
+            <span
+              key={level}
+              className={level === responseWindowLevel ? "is-active" : undefined}
+            >
+              {level}
+            </span>
+          ))}
+        </div>
+        <datalist id="response-window-levels">
+          {RESPONSE_WINDOW_LEVELS.map((level) => (
+            <option key={level} value={level} />
+          ))}
+        </datalist>
       </div>
 
       <div className="battle-panel">

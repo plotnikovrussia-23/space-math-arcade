@@ -353,8 +353,8 @@ button {
   flex: 1 1 auto;
   min-height: 0;
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  gap: 12px;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: 10px;
 }
 
 .battle-topbar {
@@ -364,7 +364,7 @@ button {
   gap: 12px;
   border-radius: 22px;
   background: rgba(255, 255, 255, 0.72);
-  padding: 12px 14px;
+  padding: 10px 14px;
 }
 
 .shield-bar {
@@ -402,14 +402,61 @@ button {
   font-size: 0.78rem;
 }
 
+.response-tuning-panel {
+  display: grid;
+  gap: 8px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.72);
+  padding: 10px 14px 12px;
+}
+
+.response-tuning-copy {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.response-tuning-copy strong {
+  font-size: 0.96rem;
+}
+
+.response-tuning-copy span {
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+  text-align: right;
+}
+
+.response-tuning-slider {
+  width: 100%;
+  margin: 0;
+  accent-color: #2568ff;
+}
+
+.response-tuning-labels {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  color: var(--ink-soft);
+  font-size: 0.76rem;
+  text-align: center;
+}
+
+.response-tuning-labels .is-active {
+  color: #123a99;
+  font-weight: 800;
+}
+
 .battle-panel {
   position: relative;
   overflow: hidden;
   flex: 1 1 auto;
   min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 8px;
   border-radius: 28px;
   background: rgba(255, 255, 255, 0.32);
-  padding: 8px 8px 84px;
+  padding: 8px;
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.44);
 }
 
@@ -432,8 +479,9 @@ button {
 
 .battle-canvas {
   width: 100%;
-  height: min(36svh, 240px);
-  min-height: 190px;
+  min-height: clamp(220px, 38svh, 320px);
+  height: 100%;
+  flex: 1 1 auto;
   display: flex;
   align-items: stretch;
   overflow: hidden;
@@ -695,8 +743,6 @@ button {
 }
 
 .question-panel {
-  position: absolute;
-  inset: auto 8px 8px 8px;
   display: grid;
   gap: 6px;
   z-index: 2;
@@ -706,7 +752,7 @@ button {
 .feedback-banner {
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.88);
-  padding: 10px 14px;
+  padding: 9px 14px;
   text-align: center;
   box-shadow: 0 8px 16px rgba(16, 56, 166, 0.1);
 }
@@ -719,7 +765,7 @@ button {
 }
 
 .feedback-banner {
-  min-height: 34px;
+  min-height: 32px;
   font-size: 0.84rem;
   font-weight: 800;
   color: #1753db;
@@ -735,16 +781,16 @@ button {
 .answers-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: 10px 12px;
   flex: 0 0 auto;
 }
 
 .answer-button {
-  min-height: 74px;
+  min-height: 60px;
   background: rgba(255, 255, 255, 0.88);
   box-shadow: 0 14px 24px rgba(16, 56, 166, 0.14);
   color: #0c2a75;
-  font-size: 1.6rem;
+  font-size: 1.45rem;
   font-weight: 800;
 }
 
@@ -822,14 +868,14 @@ button {
   .battle-screen {
     flex: 1 1 auto;
     min-height: 0;
-    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
     gap: 10px;
   }
 
   .battle-topbar {
     gap: 10px;
     border-radius: 18px;
-    padding: 8px 10px;
+    padding: 9px 11px;
   }
 
   .shield-bar {
@@ -842,22 +888,41 @@ button {
   }
 
   .battle-meta {
-    font-size: 0.74rem;
+    font-size: 0.78rem;
   }
 
   .battle-meta strong {
-    font-size: 0.88rem;
+    font-size: 0.92rem;
   }
 
   .battle-weapon {
-    font-size: 0.68rem;
+    font-size: 0.7rem;
+  }
+
+  .response-tuning-panel {
+    gap: 7px;
+    border-radius: 18px;
+    padding: 9px 11px 10px;
+  }
+
+  .response-tuning-copy strong {
+    font-size: 0.88rem;
+  }
+
+  .response-tuning-copy span {
+    font-size: 0.74rem;
+  }
+
+  .response-tuning-labels {
+    font-size: 0.7rem;
   }
 
   .battle-panel {
     flex: 1 1 auto;
     min-height: 0;
     border-radius: 24px;
-    padding: 6px 6px 74px;
+    gap: 7px;
+    padding: 7px;
   }
 
   .status-ribbon {
@@ -873,8 +938,7 @@ button {
   }
 
   .battle-canvas {
-    height: min(34dvh, 240px);
-    min-height: 184px;
+    min-height: clamp(236px, 34dvh, 290px);
     border-radius: 20px;
   }
 
@@ -1003,34 +1067,33 @@ button {
   }
 
   .question-panel {
-    inset: auto 6px 6px 6px;
     gap: 4px;
   }
 
   .formula,
   .feedback-banner {
     border-radius: 16px;
-    padding: 7px 10px;
+    padding: 8px 11px;
   }
 
   .formula {
-    font-size: clamp(1.02rem, 4.6vw, 1.35rem);
+    font-size: clamp(1.08rem, 4.8vw, 1.42rem);
     line-height: 1.05;
   }
 
   .feedback-banner {
-    min-height: 24px;
-    font-size: 0.68rem;
+    min-height: 26px;
+    font-size: 0.72rem;
   }
 
   .answers-grid {
-    gap: 8px;
+    gap: 9px;
   }
 
   .answer-button {
     min-height: 56px;
     border-radius: 18px;
-    font-size: 1.2rem;
+    font-size: 1.24rem;
     box-shadow: 0 10px 18px rgba(16, 56, 166, 0.12);
   }
 }
@@ -1046,12 +1109,12 @@ button {
   }
 
   .battle-screen {
-    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
     gap: 8px;
   }
 
   .battle-topbar {
-    padding: 7px 9px;
+    padding: 8px 10px;
   }
 
   .shield-segment {
@@ -1061,15 +1124,29 @@ button {
 
   .battle-meta {
     gap: 1px;
-    font-size: 0.7rem;
+    font-size: 0.74rem;
   }
 
   .battle-meta strong {
-    font-size: 0.82rem;
+    font-size: 0.86rem;
   }
 
   .battle-weapon {
     font-size: 0.64rem;
+  }
+
+  .response-tuning-panel {
+    gap: 6px;
+    padding: 8px 10px 9px;
+  }
+
+  .response-tuning-copy strong {
+    font-size: 0.82rem;
+  }
+
+  .response-tuning-copy span,
+  .response-tuning-labels {
+    font-size: 0.66rem;
   }
 
   .status-ribbon {
@@ -1083,8 +1160,7 @@ button {
   }
 
   .battle-canvas {
-    height: min(30dvh, 210px);
-    min-height: 168px;
+    min-height: clamp(208px, 31dvh, 240px);
   }
 
   .station-overlay {
@@ -1148,22 +1224,21 @@ button {
   }
 
   .question-panel {
-    inset: auto 7px 7px 7px;
     gap: 4px;
   }
 
   .formula,
   .feedback-banner {
-    padding: 6px 9px;
+    padding: 7px 10px;
   }
 
   .formula {
-    font-size: clamp(0.98rem, 4.4vw, 1.22rem);
+    font-size: clamp(1rem, 4.5vw, 1.26rem);
   }
 
   .feedback-banner {
     min-height: 22px;
-    font-size: 0.64rem;
+    font-size: 0.68rem;
   }
 
   .answers-grid {
@@ -1171,8 +1246,8 @@ button {
   }
 
   .answer-button {
-    min-height: 50px;
-    font-size: 1.05rem;
+    min-height: 52px;
+    font-size: 1.1rem;
   }
 }
 
@@ -1203,11 +1278,11 @@ button {
 
   .battle-meta {
     gap: 0;
-    font-size: 0.68rem;
+    font-size: 0.72rem;
   }
 
   .battle-meta strong {
-    font-size: 0.8rem;
+    font-size: 0.84rem;
   }
 
   .battle-weapon {
@@ -1216,7 +1291,27 @@ button {
 
   .battle-panel {
     border-radius: 20px;
-    padding: 5px 5px 66px;
+    gap: 6px;
+    padding: 6px;
+  }
+
+  .response-tuning-panel {
+    gap: 5px;
+    border-radius: 16px;
+    padding: 7px 9px 8px;
+  }
+
+  .response-tuning-copy {
+    gap: 8px;
+  }
+
+  .response-tuning-copy strong {
+    font-size: 0.76rem;
+  }
+
+  .response-tuning-copy span,
+  .response-tuning-labels {
+    font-size: 0.62rem;
   }
 
   .status-ribbon {
@@ -1232,30 +1327,28 @@ button {
   }
 
   .battle-canvas {
-    height: min(28svh, 190px);
-    min-height: 156px;
+    min-height: clamp(196px, 29svh, 222px);
     border-radius: 16px;
   }
 
   .question-panel {
-    inset: auto 6px 6px 6px;
     gap: 3px;
   }
 
   .formula,
   .feedback-banner {
     border-radius: 14px;
-    padding: 5px 8px;
+    padding: 6px 9px;
   }
 
   .formula {
-    font-size: clamp(0.94rem, 4.2vw, 1.08rem);
+    font-size: clamp(0.96rem, 4.2vw, 1.12rem);
     line-height: 1;
   }
 
   .feedback-banner {
     min-height: 20px;
-    font-size: 0.6rem;
+    font-size: 0.64rem;
   }
 
   .answers-grid {
@@ -1263,9 +1356,9 @@ button {
   }
 
   .answer-button {
-    min-height: 44px;
+    min-height: 48px;
     border-radius: 16px;
-    font-size: 0.96rem;
+    font-size: 1.04rem;
     box-shadow: 0 8px 14px rgba(16, 56, 166, 0.1);
   }
 }

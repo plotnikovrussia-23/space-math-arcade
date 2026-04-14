@@ -11,6 +11,7 @@ export function PhaserBattle() {
   const lastQuestionIdRef = useRef("");
   const lastOutcomeIdRef = useRef("");
   const battle = useGameStore((state) => state.battle);
+  const responseWindowLevel = useGameStore((state) => state.responseWindowLevel);
 
   useEffect(() => {
     if (!containerRef.current || gameRef.current) {
@@ -22,7 +23,7 @@ export function PhaserBattle() {
     const game = new Phaser.Game({
       type: Phaser.AUTO,
       width: 414,
-      height: 500,
+      height: 560,
       parent: containerRef.current,
       transparent: true,
       backgroundColor: "#00000000",
@@ -56,7 +57,10 @@ export function PhaserBattle() {
         totalQuestions: battle.questions.length,
         planetId: battle.planetId,
         weaponLevel: battle.weaponLevel,
-        timeLimitMs: QUESTION_TIME_LIMIT_MS(battle.planetId),
+        timeLimitMs: QUESTION_TIME_LIMIT_MS(
+          battle.planetId,
+          responseWindowLevel
+        ),
         isBoss: question.difficultyTier === "boss"
       });
     }
@@ -68,7 +72,7 @@ export function PhaserBattle() {
       lastOutcomeIdRef.current = battle.currentOutcome.id;
       sceneRef.current.resolveOutcome(battle.currentOutcome);
     }
-  }, [battle]);
+  }, [battle, responseWindowLevel]);
 
   return <div className="battle-canvas" ref={containerRef} />;
 }
