@@ -21,11 +21,8 @@ export interface SceneQuestionPayload {
 export class BattleScene extends Phaser.Scene {
   private background!: Phaser.GameObjects.Graphics;
   private station!: Phaser.GameObjects.Container;
-  private enemy!: Phaser.GameObjects.Arc;
-  private enemyHalo!: Phaser.GameObjects.Arc;
-  private enemyCore!: Phaser.GameObjects.Arc;
-  private enemyEye!: Phaser.GameObjects.Arc;
-  private enemyPupil!: Phaser.GameObjects.Arc;
+  private enemy!: Phaser.GameObjects.Container;
+  private enemyHalo!: Phaser.GameObjects.Ellipse;
   private beam!: Phaser.GameObjects.Graphics;
   private stars: Phaser.GameObjects.Arc[] = [];
   private lastQuestionId = "";
@@ -153,24 +150,55 @@ export class BattleScene extends Phaser.Scene {
     if (this.enemy) {
       this.enemy.destroy();
       this.enemyHalo.destroy();
-      this.enemyCore.destroy();
-      this.enemyEye.destroy();
-      this.enemyPupil.destroy();
     }
 
     const tint = PLANET_BY_ID[this.currentPlanetId].enemyTint;
-    this.enemyHalo = this.add.circle(207, -80, isBoss ? 52 : 40, tint, 0.2);
-    this.enemy = this.add.circle(207, -80, isBoss ? 35 : 26, tint, 1);
-    this.enemy.setStrokeStyle(7, 0x1038a6, 0.95);
-    this.enemyCore = this.add.circle(207, -80, isBoss ? 14 : 10, 0xffffff, 0.92);
-    this.enemyEye = this.add.circle(207, -80, isBoss ? 8 : 6, 0xff5577, 0.95);
-    this.enemyPupil = this.add.circle(207, -80, isBoss ? 3 : 2, 0xffffff, 0.92);
+    this.enemyHalo = this.add.ellipse(207, -80, isBoss ? 74 : 58, isBoss ? 32 : 24, 0x1038a6, 0.2);
+
+    const shadow = this.add.ellipse(0, 42, isBoss ? 54 : 42, isBoss ? 16 : 12, 0x1038a6, 0.24);
+    const body = this.add.circle(0, 0, isBoss ? 29 : 23, tint, 1);
+    body.setStrokeStyle(4, 0x123a99, 0.95);
+    const bodyGloss = this.add.circle(-(isBoss ? 8 : 6), -(isBoss ? 8 : 6), isBoss ? 9 : 7, 0xffffff, 0.22);
+    const band = this.add.rectangle(0, 3, isBoss ? 40 : 32, 10, 0xffd76c, 1);
+    band.setStrokeStyle(2, 0x123a99, 0.18);
+    const fuseCap = this.add.rectangle(0, -(isBoss ? 28 : 22), isBoss ? 18 : 14, 10, 0x73e8ff, 1);
+    fuseCap.setStrokeStyle(3, 0xffffff, 0.74);
+    const fuseLeft = this.add.rectangle(-(isBoss ? 7 : 5), -(isBoss ? 35 : 28), 4, isBoss ? 16 : 12, 0x73e8ff, 1);
+    fuseLeft.setAngle(-18);
+    const fuseRight = this.add.rectangle(isBoss ? 7 : 5, -(isBoss ? 35 : 28), 4, isBoss ? 16 : 12, 0x73e8ff, 1);
+    fuseRight.setAngle(18);
+    const spark = this.add.circle(0, -(isBoss ? 43 : 34), isBoss ? 6 : 5, 0xfff1a1, 0.98);
+    spark.setStrokeStyle(2, 0xffffff, 0.92);
+    const sparkCore = this.add.circle(0, -(isBoss ? 43 : 34), isBoss ? 3 : 2.5, 0xff7a59, 0.96);
+    const nose = this.add.triangle(
+      0,
+      isBoss ? 31 : 25,
+      0,
+      18,
+      -(isBoss ? 14 : 11),
+      -4,
+      isBoss ? 14 : 11,
+      -4,
+      0xff4d7e,
+      1
+    );
+    nose.setStrokeStyle(4, 0x123a99, 0.95);
+
+    this.enemy = this.add.container(207, -80, [
+      shadow,
+      body,
+      bodyGloss,
+      band,
+      fuseCap,
+      fuseLeft,
+      fuseRight,
+      spark,
+      sparkCore,
+      nose,
+    ]);
 
     this.enemyHalo.setDepth(3);
     this.enemy.setDepth(4);
-    this.enemyCore.setDepth(5);
-    this.enemyEye.setDepth(6);
-    this.enemyPupil.setDepth(7);
   }
 
   private drawBackground(planetId: PlanetId) {
@@ -265,13 +293,7 @@ export class BattleScene extends Phaser.Scene {
     });
 
     this.tweens.add({
-      targets: [
-        this.enemyHalo,
-        this.enemy,
-        this.enemyCore,
-        this.enemyEye,
-        this.enemyPupil
-      ],
+      targets: [this.enemyHalo, this.enemy],
       scale: 1.4,
       alpha: 0,
       duration: 280,
@@ -292,19 +314,10 @@ export class BattleScene extends Phaser.Scene {
     this.enemyApproachActive = false;
     this.tweens.killTweensOf([
       this.enemyHalo,
-      this.enemy,
-      this.enemyCore,
-      this.enemyEye,
-      this.enemyPupil
+      this.enemy
     ]);
     this.tweens.add({
-      targets: [
-        this.enemyHalo,
-        this.enemy,
-        this.enemyCore,
-        this.enemyEye,
-        this.enemyPupil
-      ],
+      targets: [this.enemyHalo, this.enemy],
       x: 207,
       y: scaleY(480),
       duration: 220,
@@ -349,20 +362,11 @@ export class BattleScene extends Phaser.Scene {
   private setEnemyTransform(x: number, y: number, scale: number, alpha: number) {
     this.enemyHalo.setPosition(x, y);
     this.enemy.setPosition(x, y);
-    this.enemyCore.setPosition(x, y);
-    this.enemyEye.setPosition(x, y);
-    this.enemyPupil.setPosition(x, y);
 
     this.enemyHalo.setScale(scale * 1.08);
     this.enemy.setScale(scale);
-    this.enemyCore.setScale(scale);
-    this.enemyEye.setScale(scale);
-    this.enemyPupil.setScale(scale);
 
     this.enemyHalo.setAlpha(alpha * 0.22);
     this.enemy.setAlpha(alpha);
-    this.enemyCore.setAlpha(alpha);
-    this.enemyEye.setAlpha(alpha);
-    this.enemyPupil.setAlpha(alpha);
   }
 }
