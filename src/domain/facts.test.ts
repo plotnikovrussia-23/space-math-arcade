@@ -16,15 +16,19 @@ describe("facts", () => {
     expect(family).toBeDefined();
     expect(formatPrompt(family!, "divideByA")).toMatchObject({
       text: "42 ÷ 6",
+      spokenText: "сорок два разделить на шесть",
       correctAnswer: 7,
       revealText: "42 ÷ 6 = 7",
-      spokenRevealText: "42 разделить на 6. Равно 7. Ответ 7."
+      spokenRevealText:
+        "сорок два разделить на шесть. Равно семь. Ответ семь."
     });
     expect(formatPrompt(family!, "divideByB")).toMatchObject({
       text: "42 ÷ 7",
+      spokenText: "сорок два разделить на семь",
       correctAnswer: 6,
       revealText: "42 ÷ 7 = 6",
-      spokenRevealText: "42 разделить на 7. Равно 6. Ответ 6."
+      spokenRevealText:
+        "сорок два разделить на семь. Равно шесть. Ответ шесть."
     });
   });
 });

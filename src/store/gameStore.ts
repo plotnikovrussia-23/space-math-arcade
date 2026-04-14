@@ -39,7 +39,7 @@ const initialCompletedPlanetIndex: Record<GameMode, number> = {
   galactic: -1
 };
 
-const SUCCESS_REVEAL_MIN_DELAY_MS = 4800;
+const SUCCESS_REVEAL_MIN_DELAY_MS = 6200;
 const FAILURE_REVEAL_DELAY_MS = 840;
 
 let timeoutHandle: number | null = null;
@@ -423,8 +423,8 @@ const submitBattleAnswer = (
     void audioDirector
       .speakAndWait(question.spokenRevealText, {
         minimumDurationMs: SUCCESS_REVEAL_MIN_DELAY_MS,
-        postSpeechDelayMs: 1200,
-        rate: 0.82,
+        postSpeechDelayMs: 1500,
+        rate: 0.78,
         pitch: 1
       })
       .then(() => {

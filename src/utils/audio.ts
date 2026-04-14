@@ -50,14 +50,18 @@ class AudioDirector {
     this.syncMusic();
   }
 
-  private estimateSpeechFallbackMs(text: string) {
+  private estimateSpeechDurationMs(text: string, rate: number) {
     const normalized = text.trim();
 
     if (!normalized) {
       return 0;
     }
 
-    return Math.max(2200, normalized.length * 140);
+    const words = normalized.split(/\s+/).length;
+    const punctuationPauses = (normalized.match(/[.,!?;:]/g) ?? []).length;
+    const baseDurationMs = words * 420 + punctuationPauses * 220 + 900;
+
+    return Math.max(2600, Math.round(baseDurationMs / Math.max(rate, 0.55)));
   }
 
   private normalizeSpeechText(text: string) {
@@ -195,31 +199,26 @@ class AudioDirector {
     utterance.pitch = options.pitch ?? 1.05;
     utterance.volume = 0.95;
 
+    const rate = options.rate ?? 1;
     const minimumDurationMs = options.minimumDurationMs ?? 0;
     const postSpeechDelayMs = options.postSpeechDelayMs ?? 0;
-    const fallbackDurationMs = Math.max(
+    const durationGateMs = Math.max(
       minimumDurationMs,
-      this.estimateSpeechFallbackMs(normalizedText) + postSpeechDelayMs
+      this.estimateSpeechDurationMs(normalizedText, rate) + postSpeechDelayMs
     );
+    const fallbackDurationMs = durationGateMs + 2500;
 
     return new Promise<void>((resolve) => {
       let settled = false;
       let speechFinished = false;
-      let minimumDelayFinished = minimumDurationMs <= 0;
-      let postSpeechDelayFinished = postSpeechDelayMs <= 0;
-      let minimumDelayHandle: number | null = null;
-      let postSpeechDelayHandle: number | null = null;
+      let durationGateFinished = durationGateMs <= 0;
+      let durationGateHandle: number | null = null;
       let fallbackHandle: number | null = null;
 
       const cleanup = () => {
-        if (minimumDelayHandle !== null) {
-          window.clearTimeout(minimumDelayHandle);
-          minimumDelayHandle = null;
-        }
-
-        if (postSpeechDelayHandle !== null) {
-          window.clearTimeout(postSpeechDelayHandle);
-          postSpeechDelayHandle = null;
+        if (durationGateHandle !== null) {
+          window.clearTimeout(durationGateHandle);
+          durationGateHandle = null;
         }
 
         if (fallbackHandle !== null) {
@@ -248,20 +247,9 @@ class AudioDirector {
       };
 
       const maybeFinish = () => {
-        if (speechFinished && minimumDelayFinished && postSpeechDelayFinished) {
+        if (speechFinished && durationGateFinished) {
           finish();
         }
-      };
-
-      const schedulePostSpeechDelay = () => {
-        if (postSpeechDelayFinished || postSpeechDelayHandle !== null) {
-          return;
-        }
-
-        postSpeechDelayHandle = window.setTimeout(() => {
-          postSpeechDelayFinished = true;
-          maybeFinish();
-        }, postSpeechDelayMs);
       };
 
       this.activeSpeechCleanup = cleanup;
@@ -269,26 +257,24 @@ class AudioDirector {
 
       utterance.onend = () => {
         speechFinished = true;
-        schedulePostSpeechDelay();
         maybeFinish();
       };
 
       utterance.onerror = () => {
         speechFinished = true;
-        schedulePostSpeechDelay();
         maybeFinish();
       };
 
-      if (!minimumDelayFinished) {
-        minimumDelayHandle = window.setTimeout(() => {
-          minimumDelayFinished = true;
+      if (!durationGateFinished) {
+        durationGateHandle = window.setTimeout(() => {
+          durationGateFinished = true;
           maybeFinish();
-        }, minimumDurationMs);
+        }, durationGateMs);
       }
 
       fallbackHandle = window.setTimeout(() => {
         speechFinished = true;
-        postSpeechDelayFinished = true;
+        durationGateFinished = true;
         maybeFinish();
       }, fallbackDurationMs);
 
