@@ -133,6 +133,7 @@ interface GameStore {
   toggleAudio: (channel: keyof AudioSettings) => void;
   setPlayerName: (name: string) => void;
   setResponseWindowLevel: (level: ResponseWindowLevel) => void;
+  continueFromWelcome: () => void;
   goHome: () => void;
   startModeSelection: () => void;
   selectMode: (mode: GameMode) => void;
@@ -297,7 +298,7 @@ export const useGameStore = create<GameStore>()(
       result: null,
       boot: () => {
         audioDirector.updateSettings(get().audioSettings);
-        set({ screen: "home" });
+        set({ screen: "welcome" });
       },
       unlockAudio: () => {
         audioDirector.unlock();
@@ -340,6 +341,11 @@ export const useGameStore = create<GameStore>()(
             submitBattleAnswer(set, get, null);
           }
         }, Math.max(QUESTION_TIME_LIMIT_MS(battle.planetId, level) - (performance.now() - battle.questionStartedAt), 40));
+      },
+      continueFromWelcome: () => {
+        audioDirector.unlock();
+        audioDirector.playSfx("click");
+        set({ screen: "home" });
       },
       goHome: () => {
         clearHandles();

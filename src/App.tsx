@@ -5,7 +5,8 @@ import {
   ModeSelectScreen,
   PlanetMapScreen,
   ResultScreen,
-  SettingsModal
+  SettingsModal,
+  WelcomeScreen
 } from "./components/screens";
 import { useGameStore } from "./store/gameStore";
 
@@ -19,6 +20,7 @@ export default function App() {
 
   return (
     <main className="app-shell">
+      {screen === "welcome" && <WelcomeScreen />}
       {screen === "home" && <HomeScreen />}
       {screen === "modeSelect" && <ModeSelectScreen />}
       {screen === "planetMap" && <PlanetMapScreen />}

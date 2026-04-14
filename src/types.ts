@@ -1,5 +1,6 @@
 export type UIScreen =
   | "boot"
+  | "welcome"
   | "home"
   | "modeSelect"
   | "planetMap"

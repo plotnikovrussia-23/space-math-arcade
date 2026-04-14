@@ -126,6 +126,43 @@ export function HomeScreen() {
   );
 }
 
+export function WelcomeScreen() {
+  const continueFromWelcome = useGameStore((state) => state.continueFromWelcome);
+  const playerName = useGameStore((state) => state.playerName);
+  const addressee = playerName || "Лёша";
+
+  return (
+    <section className="screen welcome-screen">
+      <div className="welcome-card">
+        <span className="eyebrow">Специальная миссия</span>
+        <h1>{`${addressee}, эта игра для тебя`}</h1>
+        <p className="welcome-lead">
+          Я сделал её специально для тебя. Проходи уровни внимательно, отвечай сам и
+          спокойно иди вперёд шаг за шагом.
+        </p>
+        <div className="reward-panel">
+          <div className="reward-card reward-card--major">
+            <strong>Главная победа</strong>
+            <span>Если пройдёшь всю игру целиком</span>
+            <b>1 час телевизора или телефона</b>
+          </div>
+          <div className="reward-card">
+            <strong>Промежуточный приз</strong>
+            <span>Если дойдёшь до середины игры</span>
+            <b>20 минут экрана</b>
+          </div>
+        </div>
+        <p className="welcome-rule">
+          {`${addressee}, правила простые: проходи уровни честно сам, не спеши и не бросай, если что-то не получилось с первого раза. Желаю тебе удачи.`}
+        </p>
+        <button className="primary-button welcome-button" onClick={continueFromWelcome}>
+          Я постараюсь и справлюсь
+        </button>
+      </div>
+    </section>
+  );
+}
+
 export function ModeSelectScreen() {
   const selectMode = useGameStore((state) => state.selectMode);
   const goHome = useGameStore((state) => state.goHome);
