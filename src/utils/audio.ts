@@ -1,6 +1,9 @@
 import type { AudioSettings } from "../types";
 
 type SfxName = "shoot" | "success" | "damage" | "upgrade" | "click";
+type SpeakOptions = {
+  minimumDurationMs?: number;
+};
 
 class AudioDirector {
   private audioContext: AudioContext | null = null;
@@ -10,6 +13,8 @@ class AudioDirector {
     voiceOn: true
   };
   private musicHandle: number | null = null;
+  private activeSpeechCleanup: (() => void) | null = null;
+  private activeSpeechResolve: (() => void) | null = null;
   private unlocked = false;
 
   unlock() {
@@ -34,8 +39,39 @@ class AudioDirector {
   }
 
   updateSettings(settings: AudioSettings) {
+    if (this.settings.voiceOn && !settings.voiceOn) {
+      this.stopSpeech();
+    }
+
     this.settings = settings;
     this.syncMusic();
+  }
+
+  private estimateSpeechFallbackMs(text: string) {
+    const normalized = text.trim();
+
+    if (!normalized) {
+      return 0;
+    }
+
+    return Math.max(2200, normalized.length * 140);
+  }
+
+  stopSpeech() {
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+    }
+
+    if (this.activeSpeechCleanup) {
+      this.activeSpeechCleanup();
+      this.activeSpeechCleanup = null;
+    }
+
+    if (this.activeSpeechResolve) {
+      const resolve = this.activeSpeechResolve;
+      this.activeSpeechResolve = null;
+      resolve();
+    }
   }
 
   private syncMusic() {
@@ -115,15 +151,20 @@ class AudioDirector {
   }
 
   speak(text: string) {
+    void this.speakAndWait(text);
+  }
+
+  speakAndWait(text: string, options: SpeakOptions = {}) {
     if (
       !this.settings.voiceOn ||
       typeof window === "undefined" ||
       !("speechSynthesis" in window)
     ) {
-      return;
+      return Promise.resolve();
     }
 
-    window.speechSynthesis.cancel();
+    this.stopSpeech();
+
     const utterance = new SpeechSynthesisUtterance(text);
     const voices = window.speechSynthesis
       .getVoices()
@@ -139,7 +180,84 @@ class AudioDirector {
     utterance.rate = 1.05;
     utterance.pitch = 1.1;
     utterance.volume = 0.95;
-    window.speechSynthesis.speak(utterance);
+
+    const minimumDurationMs = options.minimumDurationMs ?? 0;
+    const fallbackDurationMs = Math.max(
+      minimumDurationMs,
+      this.estimateSpeechFallbackMs(text)
+    );
+
+    return new Promise<void>((resolve) => {
+      let settled = false;
+      let speechFinished = false;
+      let minimumDelayFinished = minimumDurationMs <= 0;
+      let minimumDelayHandle: number | null = null;
+      let fallbackHandle: number | null = null;
+
+      const cleanup = () => {
+        if (minimumDelayHandle !== null) {
+          window.clearTimeout(minimumDelayHandle);
+          minimumDelayHandle = null;
+        }
+
+        if (fallbackHandle !== null) {
+          window.clearTimeout(fallbackHandle);
+          fallbackHandle = null;
+        }
+      };
+
+      const finish = () => {
+        if (settled) {
+          return;
+        }
+
+        settled = true;
+        cleanup();
+
+        if (this.activeSpeechCleanup === cleanup) {
+          this.activeSpeechCleanup = null;
+        }
+
+        if (this.activeSpeechResolve === finish) {
+          this.activeSpeechResolve = null;
+        }
+
+        resolve();
+      };
+
+      const maybeFinish = () => {
+        if (speechFinished && minimumDelayFinished) {
+          finish();
+        }
+      };
+
+      this.activeSpeechCleanup = cleanup;
+      this.activeSpeechResolve = finish;
+
+      utterance.onend = () => {
+        speechFinished = true;
+        maybeFinish();
+      };
+
+      utterance.onerror = () => {
+        speechFinished = true;
+        maybeFinish();
+      };
+
+      if (!minimumDelayFinished) {
+        minimumDelayHandle = window.setTimeout(() => {
+          minimumDelayFinished = true;
+          maybeFinish();
+        }, minimumDurationMs);
+      }
+
+      fallbackHandle = window.setTimeout(() => {
+        speechFinished = true;
+        maybeFinish();
+      }, fallbackDurationMs);
+
+      window.speechSynthesis.speak(utterance);
+    });
   }
 }
 

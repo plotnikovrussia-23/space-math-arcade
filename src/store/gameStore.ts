@@ -39,6 +39,9 @@ const initialCompletedPlanetIndex: Record<GameMode, number> = {
   galactic: -1
 };
 
+const SUCCESS_REVEAL_MIN_DELAY_MS = 1920;
+const FAILURE_REVEAL_DELAY_MS = 840;
+
 let timeoutHandle: number | null = null;
 let revealHandle: number | null = null;
 
@@ -56,6 +59,8 @@ const clearHandles = () => {
     window.clearTimeout(revealHandle);
     revealHandle = null;
   }
+
+  audioDirector.stopSpeech();
 };
 
 interface GameStore {
@@ -99,6 +104,78 @@ const scheduleQuestionTimeout = (planetId: PlanetId, submitTimeout: () => void) 
 const pushRecentPrompt = (list: string[], promptId: string) => {
   const next = [...list, promptId];
   return next.slice(-12);
+};
+
+const resolveOutcomeAndContinue = (
+  set: Parameters<typeof useGameStore.setState>[0] extends infer _U
+    ? typeof useGameStore.setState
+    : typeof useGameStore.setState,
+  get: typeof useGameStore.getState,
+  outcomeId: string
+) => {
+  const refreshed = get();
+  const activeBattle = refreshed.battle;
+
+  if (!activeBattle || activeBattle.currentOutcome?.id !== outcomeId) {
+    return;
+  }
+
+  const nextQuestionIndex = activeBattle.currentQuestionIndex + 1;
+  const failedMission = activeBattle.shield <= 0;
+  const completedMission = nextQuestionIndex >= activeBattle.questions.length;
+
+  if (failedMission || completedMission) {
+    const success = completedMission && activeBattle.shield > 0;
+    const mode = refreshed.selectedMode ?? activeBattle.mode;
+    const currentPlanetIndex = getPlanetIndex(activeBattle.planetId);
+    const unlockedPlanetIndex = refreshed.unlockedPlanetIndex[mode];
+    const completedPlanetIndex = refreshed.completedPlanetIndex[mode];
+
+    set({
+      screen: "result",
+      battle: {
+        ...activeBattle,
+        phase: success ? "battleWon" : "battleLost"
+      },
+      result: buildResultSummary(activeBattle, success),
+      unlockedPlanetIndex: success
+        ? {
+            ...refreshed.unlockedPlanetIndex,
+            [mode]: Math.max(unlockedPlanetIndex, currentPlanetIndex + 1)
+          }
+        : refreshed.unlockedPlanetIndex,
+      completedPlanetIndex: success
+        ? {
+            ...refreshed.completedPlanetIndex,
+            [mode]: Math.max(completedPlanetIndex, currentPlanetIndex)
+          }
+        : refreshed.completedPlanetIndex
+    });
+    return;
+  }
+
+  const nextQuestion = activeBattle.questions[nextQuestionIndex];
+  const updatedBattle: BattleSession = {
+    ...activeBattle,
+    currentQuestionIndex: nextQuestionIndex,
+    questionStartedAt: performance.now(),
+    currentOutcome: null,
+    phase: "questionActive"
+  };
+
+  set({ battle: updatedBattle });
+  audioDirector.speak(nextQuestion.spokenText);
+  scheduleQuestionTimeout(activeBattle.planetId, () => {
+    const snapshot = get();
+    if (
+      snapshot.battle &&
+      snapshot.battle.phase === "questionActive" &&
+      snapshot.battle.questions[snapshot.battle.currentQuestionIndex]?.id ===
+        nextQuestion.id
+    ) {
+      submitBattleAnswer(set, get, null);
+    }
+  });
 };
 
 export const useGameStore = create<GameStore>()(
@@ -343,76 +420,19 @@ const submitBattleAnswer = (
     if (nextBattle.weaponLevel > battle.weaponLevel) {
       audioDirector.playSfx("upgrade");
     }
-    audioDirector.speak(question.revealText);
+    void audioDirector
+      .speakAndWait(question.revealText, {
+        minimumDurationMs: SUCCESS_REVEAL_MIN_DELAY_MS
+      })
+      .then(() => {
+        resolveOutcomeAndContinue(set, get, currentOutcome.id);
+      });
   } else {
     audioDirector.playSfx("damage");
+    revealHandle = window.setTimeout(() => {
+      resolveOutcomeAndContinue(set, get, currentOutcome.id);
+    }, FAILURE_REVEAL_DELAY_MS);
   }
-
-  revealHandle = window.setTimeout(() => {
-    const refreshed = get();
-    const activeBattle = refreshed.battle;
-
-    if (!activeBattle || activeBattle.currentOutcome?.id !== currentOutcome.id) {
-      return;
-    }
-
-    const nextQuestionIndex = activeBattle.currentQuestionIndex + 1;
-    const failedMission = activeBattle.shield <= 0;
-    const completedMission = nextQuestionIndex >= activeBattle.questions.length;
-
-    if (failedMission || completedMission) {
-      const success = completedMission && activeBattle.shield > 0;
-      const mode = refreshed.selectedMode ?? activeBattle.mode;
-      const currentPlanetIndex = getPlanetIndex(activeBattle.planetId);
-      const unlockedPlanetIndex = refreshed.unlockedPlanetIndex[mode];
-      const completedPlanetIndex = refreshed.completedPlanetIndex[mode];
-
-      set({
-        screen: "result",
-        battle: {
-          ...activeBattle,
-          phase: success ? "battleWon" : "battleLost"
-        },
-        result: buildResultSummary(activeBattle, success),
-        unlockedPlanetIndex: success
-          ? {
-              ...refreshed.unlockedPlanetIndex,
-              [mode]: Math.max(unlockedPlanetIndex, currentPlanetIndex + 1)
-            }
-          : refreshed.unlockedPlanetIndex,
-        completedPlanetIndex: success
-          ? {
-              ...refreshed.completedPlanetIndex,
-              [mode]: Math.max(completedPlanetIndex, currentPlanetIndex)
-            }
-          : refreshed.completedPlanetIndex
-      });
-      return;
-    }
-
-    const nextQuestion = activeBattle.questions[nextQuestionIndex];
-    const updatedBattle: BattleSession = {
-      ...activeBattle,
-      currentQuestionIndex: nextQuestionIndex,
-      questionStartedAt: performance.now(),
-      currentOutcome: null,
-      phase: "questionActive"
-    };
-
-    set({ battle: updatedBattle });
-    audioDirector.speak(nextQuestion.spokenText);
-    scheduleQuestionTimeout(activeBattle.planetId, () => {
-      const snapshot = get();
-      if (
-        snapshot.battle &&
-        snapshot.battle.phase === "questionActive" &&
-        snapshot.battle.questions[snapshot.battle.currentQuestionIndex]?.id ===
-          nextQuestion.id
-      ) {
-        submitBattleAnswer(set, get, null);
-      }
-    });
-  }, succeeded ? 960 : 840);
 };
 
 export const getCurrentPlanet = (state: GameStore) =>
