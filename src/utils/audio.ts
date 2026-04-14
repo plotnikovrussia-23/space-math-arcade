@@ -3,6 +3,9 @@ import type { AudioSettings } from "../types";
 type SfxName = "shoot" | "success" | "damage" | "upgrade" | "click";
 type SpeakOptions = {
   minimumDurationMs?: number;
+  postSpeechDelayMs?: number;
+  rate?: number;
+  pitch?: number;
 };
 
 class AudioDirector {
@@ -55,6 +58,16 @@ class AudioDirector {
     }
 
     return Math.max(2200, normalized.length * 140);
+  }
+
+  private normalizeSpeechText(text: string) {
+    return text
+      .replace(/×/g, " умножить на ")
+      .replace(/÷/g, " разделить на ")
+      .replace(/=/g, " равно ")
+      .replace(/%/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
   }
 
   stopSpeech() {
@@ -165,7 +178,8 @@ class AudioDirector {
 
     this.stopSpeech();
 
-    const utterance = new SpeechSynthesisUtterance(text);
+    const normalizedText = this.normalizeSpeechText(text);
+    const utterance = new SpeechSynthesisUtterance(normalizedText);
     const voices = window.speechSynthesis
       .getVoices()
       .filter((voice) => voice.lang.toLowerCase().startsWith("ru"));
@@ -177,27 +191,35 @@ class AudioDirector {
       utterance.lang = "ru-RU";
     }
 
-    utterance.rate = 1.05;
-    utterance.pitch = 1.1;
+    utterance.rate = options.rate ?? 1;
+    utterance.pitch = options.pitch ?? 1.05;
     utterance.volume = 0.95;
 
     const minimumDurationMs = options.minimumDurationMs ?? 0;
+    const postSpeechDelayMs = options.postSpeechDelayMs ?? 0;
     const fallbackDurationMs = Math.max(
       minimumDurationMs,
-      this.estimateSpeechFallbackMs(text)
+      this.estimateSpeechFallbackMs(normalizedText) + postSpeechDelayMs
     );
 
     return new Promise<void>((resolve) => {
       let settled = false;
       let speechFinished = false;
       let minimumDelayFinished = minimumDurationMs <= 0;
+      let postSpeechDelayFinished = postSpeechDelayMs <= 0;
       let minimumDelayHandle: number | null = null;
+      let postSpeechDelayHandle: number | null = null;
       let fallbackHandle: number | null = null;
 
       const cleanup = () => {
         if (minimumDelayHandle !== null) {
           window.clearTimeout(minimumDelayHandle);
           minimumDelayHandle = null;
+        }
+
+        if (postSpeechDelayHandle !== null) {
+          window.clearTimeout(postSpeechDelayHandle);
+          postSpeechDelayHandle = null;
         }
 
         if (fallbackHandle !== null) {
@@ -226,9 +248,20 @@ class AudioDirector {
       };
 
       const maybeFinish = () => {
-        if (speechFinished && minimumDelayFinished) {
+        if (speechFinished && minimumDelayFinished && postSpeechDelayFinished) {
           finish();
         }
+      };
+
+      const schedulePostSpeechDelay = () => {
+        if (postSpeechDelayFinished || postSpeechDelayHandle !== null) {
+          return;
+        }
+
+        postSpeechDelayHandle = window.setTimeout(() => {
+          postSpeechDelayFinished = true;
+          maybeFinish();
+        }, postSpeechDelayMs);
       };
 
       this.activeSpeechCleanup = cleanup;
@@ -236,11 +269,13 @@ class AudioDirector {
 
       utterance.onend = () => {
         speechFinished = true;
+        schedulePostSpeechDelay();
         maybeFinish();
       };
 
       utterance.onerror = () => {
         speechFinished = true;
+        schedulePostSpeechDelay();
         maybeFinish();
       };
 
@@ -253,6 +288,7 @@ class AudioDirector {
 
       fallbackHandle = window.setTimeout(() => {
         speechFinished = true;
+        postSpeechDelayFinished = true;
         maybeFinish();
       }, fallbackDurationMs);
 

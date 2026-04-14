@@ -41,7 +41,7 @@ export const formatPrompt = (
       spokenText: `${family.a} умножить на ${family.b}`,
       correctAnswer: family.product,
       revealText: `${family.a} × ${family.b} = ${family.product}`,
-      spokenRevealText: `${family.a} умножить на ${family.b} равно ${family.product}`,
+      spokenRevealText: `${family.a} умножить на ${family.b}. Равно ${family.product}. Ответ ${family.product}.`,
       promptId: `${family.id}:multiply`
     };
   }
@@ -52,7 +52,7 @@ export const formatPrompt = (
       spokenText: `${family.product} разделить на ${family.a}`,
       correctAnswer: family.b,
       revealText: `${family.product} ÷ ${family.a} = ${family.b}`,
-      spokenRevealText: `${family.product} разделить на ${family.a} равно ${family.b}`,
+      spokenRevealText: `${family.product} разделить на ${family.a}. Равно ${family.b}. Ответ ${family.b}.`,
       promptId: `${family.id}:divideByA`
     };
   }
@@ -62,7 +62,7 @@ export const formatPrompt = (
     spokenText: `${family.product} разделить на ${family.b}`,
     correctAnswer: family.a,
     revealText: `${family.product} ÷ ${family.b} = ${family.a}`,
-    spokenRevealText: `${family.product} разделить на ${family.b} равно ${family.a}`,
+    spokenRevealText: `${family.product} разделить на ${family.b}. Равно ${family.a}. Ответ ${family.a}.`,
     promptId: `${family.id}:divideByB`
   };
 };
