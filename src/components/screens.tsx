@@ -104,6 +104,7 @@ export function PlanetMapScreen() {
   const unlockedPlanetIndex = useGameStore((state) => state.unlockedPlanetIndex);
   const completedPlanetIndex = useGameStore((state) => state.completedPlanetIndex);
   const selectPlanet = useGameStore((state) => state.selectPlanet);
+  const startPlanetBattle = useGameStore((state) => state.startPlanetBattle);
   const startBattle = useGameStore((state) => state.startBattle);
   const goHome = useGameStore((state) => state.goHome);
 
@@ -137,19 +138,35 @@ export function PlanetMapScreen() {
           const isActive = planet.id === selectedPlanetId;
 
           return (
-            <button
+            <div
               key={planet.id}
-              className={`planet-card ${isActive ? "is-active" : ""}`}
-              disabled={!isUnlocked}
-              onClick={() => selectPlanet(planet.id as PlanetId)}
+              className={`planet-card ${isActive ? "is-active" : ""} ${isUnlocked ? "" : "is-locked"}`}
             >
               <span>{index + 1}</span>
               <div>
-                <strong>{planet.name}</strong>
+                <button
+                  type="button"
+                  className="planet-title-button"
+                  disabled={!isUnlocked}
+                  onClick={() => {
+                    if (isUnlocked) {
+                      startPlanetBattle(planet.id as PlanetId);
+                    }
+                  }}
+                >
+                  <strong>{planet.name}</strong>
+                </button>
                 <p>{planet.subtitle}</p>
               </div>
-              <em>{isCompleted ? "Очищено" : isUnlocked ? "Доступно" : "Закрыто"}</em>
-            </button>
+              <button
+                type="button"
+                className="planet-status-button"
+                disabled={!isUnlocked}
+                onClick={() => selectPlanet(planet.id as PlanetId)}
+              >
+                <em>{isCompleted ? "Очищено" : isUnlocked ? "Доступно" : "Закрыто"}</em>
+              </button>
+            </div>
           );
         })}
       </div>

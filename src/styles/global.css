@@ -274,6 +274,10 @@ button {
   gap: 12px;
 }
 
+.planet-card > div {
+  min-width: 0;
+}
+
 .planet-card span {
   display: grid;
   aspect-ratio: 1;
@@ -284,19 +288,45 @@ button {
   font-weight: 700;
 }
 
+.planet-title-button,
+.planet-status-button {
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+
+.planet-title-button {
+  cursor: pointer;
+  text-align: left;
+}
+
+.planet-title-button strong {
+  display: inline-block;
+}
+
+.planet-title-button:disabled,
+.planet-status-button:disabled {
+  cursor: not-allowed;
+}
+
+.planet-title-button:disabled strong,
+.planet-status-button:disabled em,
+.planet-card.is-locked {
+  opacity: 0.5;
+}
+
 .planet-card em {
   font-style: normal;
   color: var(--ink-soft);
   font-size: 0.8rem;
 }
 
-.planet-card.is-active {
-  outline: 3px solid rgba(37, 104, 255, 0.25);
+.planet-status-button {
+  cursor: pointer;
 }
 
-.planet-card:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.planet-card.is-active {
+  outline: 3px solid rgba(37, 104, 255, 0.25);
 }
 
 .planet-progress {

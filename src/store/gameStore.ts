@@ -84,11 +84,57 @@ interface GameStore {
   startModeSelection: () => void;
   selectMode: (mode: GameMode) => void;
   selectPlanet: (planetId: PlanetId) => void;
+  startPlanetBattle: (planetId: PlanetId) => void;
   startBattle: () => void;
   submitAnswer: (answer: number) => void;
   retryBattle: () => void;
   nextFromResult: () => void;
 }
+
+const beginBattle = (
+  set: typeof useGameStore.setState,
+  get: typeof useGameStore.getState,
+  planetId: PlanetId
+) => {
+  const { selectedMode, mastery, recentPromptIds } = get();
+
+  if (!selectedMode) {
+    return;
+  }
+
+  clearHandles();
+  audioDirector.unlock();
+  audioDirector.playSfx("click");
+
+  const battle = createBattleSession({
+    mode: selectedMode,
+    planetId,
+    masteryMap: mastery,
+    recentPromptIds
+  });
+
+  battle.phase = "questionActive";
+  battle.questionStartedAt = performance.now();
+  set({
+    screen: "battle",
+    selectedPlanetId: planetId,
+    battle,
+    result: null
+  });
+
+  const question = battle.questions[0];
+  audioDirector.speak(question.spokenText);
+  scheduleQuestionTimeout(planetId, () => {
+    const state = get();
+    if (
+      state.battle &&
+      state.battle.phase === "questionActive" &&
+      state.battle.questions[state.battle.currentQuestionIndex]?.id === question.id
+    ) {
+      submitBattleAnswer(set, get, null);
+    }
+  });
+};
 
 const scheduleQuestionTimeout = (planetId: PlanetId, submitTimeout: () => void) => {
   if (typeof window === "undefined") {
@@ -237,44 +283,11 @@ export const useGameStore = create<GameStore>()(
         audioDirector.playSfx("click");
         set({ selectedPlanetId: planetId });
       },
+      startPlanetBattle: (planetId) => {
+        beginBattle(set, get, planetId);
+      },
       startBattle: () => {
-        const { selectedMode, selectedPlanetId, mastery, recentPromptIds } = get();
-
-        if (!selectedMode) {
-          return;
-        }
-
-        clearHandles();
-        audioDirector.unlock();
-        audioDirector.playSfx("click");
-
-        const battle = createBattleSession({
-          mode: selectedMode,
-          planetId: selectedPlanetId,
-          masteryMap: mastery,
-          recentPromptIds
-        });
-
-        battle.phase = "questionActive";
-        battle.questionStartedAt = performance.now();
-        set({
-          screen: "battle",
-          battle,
-          result: null
-        });
-
-        const question = battle.questions[0];
-        audioDirector.speak(question.spokenText);
-        scheduleQuestionTimeout(selectedPlanetId, () => {
-          const state = get();
-          if (
-            state.battle &&
-            state.battle.phase === "questionActive" &&
-            state.battle.questions[state.battle.currentQuestionIndex]?.id === question.id
-          ) {
-            submitBattleAnswer(set, get, null);
-          }
-        });
+        beginBattle(set, get, get().selectedPlanetId);
       },
       submitAnswer: (answer) => {
         submitBattleAnswer(set, get, answer);
