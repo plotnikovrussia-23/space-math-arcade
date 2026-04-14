@@ -239,6 +239,11 @@ button {
   overflow: hidden;
 }
 
+.result-card {
+  position: relative;
+  overflow: hidden;
+}
+
 .planet-feature::after,
 .result-card::after {
   position: absolute;
@@ -249,6 +254,13 @@ button {
   background: radial-gradient(circle, var(--planet-accent, #37d8ff), transparent 68%);
   content: "";
   opacity: 0.45;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.result-card > * {
+  position: relative;
+  z-index: 1;
 }
 
 .planet-card {
