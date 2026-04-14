@@ -287,12 +287,18 @@ export const useGameStore = create<GameStore>()(
       nextFromResult: () => {
         const { result, selectedMode, unlockedPlanetIndex } = get();
 
-        if (!result || !selectedMode) {
+        if (!result) {
           return;
         }
 
+        const mode = selectedMode ?? result.mode;
+
         if (!result.success) {
-          set({ screen: "planetMap", result: null });
+          set({
+            screen: "planetMap",
+            result: null,
+            selectedMode: mode
+          });
           return;
         }
 
@@ -302,10 +308,11 @@ export const useGameStore = create<GameStore>()(
         set({
           result: null,
           screen: "planetMap",
+          selectedMode: mode,
           selectedPlanetId: nextPlanetId,
           unlockedPlanetIndex: {
             ...unlockedPlanetIndex,
-            [selectedMode]: Math.max(unlockedPlanetIndex[selectedMode], nextIndex)
+            [mode]: Math.max(unlockedPlanetIndex[mode], nextIndex)
           }
         });
       }
