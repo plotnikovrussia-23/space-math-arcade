@@ -139,4 +139,6 @@ export interface ResultSummary {
   destroyed: number;
   bestStreak: number;
   difficultFacts: string[];
+  encouragementText: string;
+  difficultFactsTitle: string;
 }

@@ -115,6 +115,7 @@ const clearHandles = () => {
 interface GameStore {
   screen: UIScreen;
   settingsOpen: boolean;
+  playerName: string;
   selectedMode: GameMode | null;
   selectedPlanetId: PlanetId;
   responseWindowLevel: ResponseWindowLevel;
@@ -130,6 +131,7 @@ interface GameStore {
   openSettings: () => void;
   closeSettings: () => void;
   toggleAudio: (channel: keyof AudioSettings) => void;
+  setPlayerName: (name: string) => void;
   setResponseWindowLevel: (level: ResponseWindowLevel) => void;
   goHome: () => void;
   startModeSelection: () => void;
@@ -236,7 +238,7 @@ const resolveOutcomeAndContinue = (
         ...activeBattle,
         phase: success ? "battleWon" : "battleLost"
       },
-      result: buildResultSummary(activeBattle, success),
+      result: buildResultSummary(activeBattle, success, refreshed.playerName.trim()),
       unlockedPlanetIndex: success
         ? {
             ...refreshed.unlockedPlanetIndex,
@@ -282,6 +284,7 @@ export const useGameStore = create<GameStore>()(
     (set, get) => ({
       screen: "boot",
       settingsOpen: false,
+      playerName: "",
       selectedMode: null,
       selectedPlanetId: PLANETS[0].id,
       responseWindowLevel: 3,
@@ -309,6 +312,9 @@ export const useGameStore = create<GameStore>()(
 
         audioDirector.updateSettings(audioSettings);
         set({ audioSettings });
+      },
+      setPlayerName: (name) => {
+        set({ playerName: name.trimStart().slice(0, 24) });
       },
       setResponseWindowLevel: (level) => {
         set({ responseWindowLevel: level });
@@ -415,6 +421,7 @@ export const useGameStore = create<GameStore>()(
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         audioSettings: state.audioSettings,
+        playerName: state.playerName,
         mastery: state.mastery,
         recentPromptIds: state.recentPromptIds,
         unlockedPlanetIndex: state.unlockedPlanetIndex,

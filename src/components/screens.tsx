@@ -24,6 +24,8 @@ export function HomeScreen() {
   const startModeSelection = useGameStore((state) => state.startModeSelection);
   const openSettings = useGameStore((state) => state.openSettings);
   const unlockAudio = useGameStore((state) => state.unlockAudio);
+  const playerName = useGameStore((state) => state.playerName);
+  const setPlayerName = useGameStore((state) => state.setPlayerName);
   const selectedPlanetId = useGameStore((state) => state.selectedPlanetId);
   const responseWindowLevel = useGameStore((state) => state.responseWindowLevel);
   const setResponseWindowLevel = useGameStore((state) => state.setResponseWindowLevel);
@@ -36,11 +38,25 @@ export function HomeScreen() {
     <section className="screen home-screen">
       <div className="hero-card">
         <span className="eyebrow">Светлая arcade-тренировка</span>
-        <h1>Космическая таблица</h1>
+        <h1>{playerName ? `${playerName}, к полёту готов?` : "Космическая таблица"}</h1>
         <p>
-          Защищай станцию, отвечай быстро и запоминай таблицу умножения как
-          суперпилот.
+          {playerName
+            ? `Защищай станцию, ${playerName}, отвечай быстро и прокачивай таблицу умножения как суперпилот.`
+            : "Защищай станцию, отвечай быстро и запоминай таблицу умножения как суперпилот."}
         </p>
+        <label className="player-name-field">
+          <span className="player-name-label">Имя пилота</span>
+          <input
+            className="player-name-input"
+            type="text"
+            inputMode="text"
+            autoComplete="given-name"
+            maxLength={24}
+            placeholder="Например, Алексей"
+            value={playerName}
+            onChange={(event) => setPlayerName(event.target.value)}
+          />
+        </label>
         <div className="hero-actions">
           <button
             className="primary-button"
@@ -305,7 +321,7 @@ export function ResultScreen() {
           {result.success ? "Сектор очищен" : "Миссия не завершена"}
         </span>
         <h2>{planet.name}</h2>
-        <p>{result.success ? "Станция защищена. Переходим дальше." : "Почти получилось. Ещё одна попытка будет лучше."}</p>
+        <p>{result.encouragementText}</p>
         <div className="result-stats">
           <div>
             <strong>{result.destroyed}</strong>
@@ -322,7 +338,7 @@ export function ResultScreen() {
         </div>
         {result.difficultFacts.length > 0 && (
           <div className="difficult-list">
-            <h3>Повторить ещё раз</h3>
+            <h3>{result.difficultFactsTitle}</h3>
             <ul>
               {result.difficultFacts.map((fact) => (
                 <li key={fact}>{fact}</li>

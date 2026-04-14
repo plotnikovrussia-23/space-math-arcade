@@ -130,9 +130,13 @@ export const getNextPlanetId = (planetId: PlanetId) => {
   return PLANETS[Math.min(index + 1, PLANETS.length - 1)].id;
 };
 
+const pickRandom = <T,>(items: T[]) =>
+  items[Math.floor(Math.random() * items.length)];
+
 export const buildResultSummary = (
   battle: BattleSession,
-  success: boolean
+  success: boolean,
+  playerName: string
 ): ResultSummary => ({
   success,
   planetId: battle.planetId,
@@ -140,7 +144,49 @@ export const buildResultSummary = (
   shieldLeft: battle.shield,
   destroyed: battle.sessionStats.destroyed,
   bestStreak: battle.sessionStats.bestStreak,
-  difficultFacts: battle.sessionStats.difficultFacts
+  difficultFacts: battle.sessionStats.difficultFacts,
+  encouragementText: (() => {
+    const namePrefix = playerName ? `${playerName}, ` : "";
+    const hasDifficultFacts = battle.sessionStats.difficultFacts.length > 0;
+
+    if (success) {
+      return pickRandom([
+        `${namePrefix}ты молодец, сектор чистый. Летим дальше.`,
+        `${namePrefix}отличная работа. Следующий уровень уже ждёт.`,
+        `${namePrefix}всё получилось. Переходим к новой миссии.`,
+        `${namePrefix}станция под защитой. Можно брать следующий сектор.`,
+        `${namePrefix}сильный заход. Продолжаем полёт.`
+      ]);
+    }
+
+    if (hasDifficultFacts) {
+      return pickRandom([
+        `${namePrefix}ещё чуть-чуть осталось. Повтори сложные примеры и снова в бой.`,
+        `${namePrefix}ты уже близко. Разберём пару трудных мест и получится.`,
+        `${namePrefix}хороший заход. Немного практики с этими примерами и сектор будет твой.`,
+        `${namePrefix}почти дожал. Повтори сложные задания и попробуй ещё раз.`,
+        `${namePrefix}уже видно прогресс. Осталось подтянуть несколько примеров.`
+      ]);
+    }
+
+    return pickRandom([
+      `${namePrefix}уже почти получилось. Следующая попытка будет сильнее.`,
+      `${namePrefix}ты на верном пути. Ещё один заход и получится лучше.`,
+      `${namePrefix}не сдаёмся. Новый старт может пройти гораздо чище.`,
+      `${namePrefix}попытка была бодрая. Сейчас соберёмся и зайдём ещё раз.`,
+      `${namePrefix}всё идёт нормально. Немного концентрации и уровень сдастся.`
+    ]);
+  })(),
+  difficultFactsTitle: (() => {
+    const namePrefix = playerName ? `${playerName}, ` : "";
+
+    return pickRandom([
+      `${namePrefix}повторим вот это:`,
+      `${namePrefix}давай добьём эти примеры:`,
+      `${namePrefix}вот что стоит ещё потренировать:`,
+      `${namePrefix}обрати внимание на эти задания:`
+    ]);
+  })()
 });
 
 export const createOutcome = ({

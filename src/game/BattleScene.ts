@@ -122,12 +122,46 @@ export class BattleScene extends Phaser.Scene {
     wingRight.setStrokeStyle(3, 0xffffff, 0.65);
     const column = this.add.rectangle(207, scaleY(516), 22, 44, 0x2b8cff, 1);
     column.setStrokeStyle(4, 0xffffff, 0.72);
-    const cannonBase = this.add.rectangle(207, scaleY(480), 36, 16, 0x163b9f, 1);
-    cannonBase.setStrokeStyle(3, 0x8ee6ff, 0.9);
-    const cannon = this.add.rectangle(207, scaleY(458), 14, 42, 0x2fe1ff, 1);
-    cannon.setStrokeStyle(4, 0xffffff, 0.92);
-    const muzzle = this.add.rectangle(207, scaleY(440), 22, 10, 0xfff6a0, 0.98);
-    muzzle.setStrokeStyle(2, 0xffffff, 0.92);
+    const cannonMount = this.add.ellipse(207, scaleY(486), 44, 24, 0x1945af, 1);
+    cannonMount.setStrokeStyle(4, 0x9ae9ff, 0.88);
+    const cannonJoint = this.add.circle(207, scaleY(478), 8, 0xffd97d, 0.98);
+    cannonJoint.setStrokeStyle(2, 0xffffff, 0.82);
+    const cannonBarrel = this.add.rectangle(207, scaleY(456), 18, 58, 0x2dd8ff, 1);
+    cannonBarrel.setStrokeStyle(4, 0xffffff, 0.92);
+    const cannonSleeveLeft = this.add.triangle(
+      199,
+      scaleY(456),
+      -13,
+      4,
+      -2,
+      -16,
+      -2,
+      20,
+      0x1750b8,
+      0.98
+    );
+    cannonSleeveLeft.setStrokeStyle(2, 0xaef4ff, 0.82);
+    const cannonSleeveRight = this.add.triangle(
+      215,
+      scaleY(456),
+      13,
+      4,
+      2,
+      -16,
+      2,
+      20,
+      0x1750b8,
+      0.98
+    );
+    cannonSleeveRight.setStrokeStyle(2, 0xaef4ff, 0.82);
+    const muzzleBody = this.add.rectangle(207, scaleY(426), 24, 16, 0x0e2e84, 1);
+    muzzleBody.setStrokeStyle(3, 0xffffff, 0.82);
+    const muzzleGlow = this.add.ellipse(207, scaleY(420), 34, 18, 0xfff1a1, 0.94);
+    muzzleGlow.setStrokeStyle(2, 0xffffff, 0.9);
+    const sidePodLeft = this.add.rectangle(193, scaleY(484), 12, 22, 0x275bce, 1);
+    sidePodLeft.setStrokeStyle(2, 0xa3ebff, 0.84);
+    const sidePodRight = this.add.rectangle(221, scaleY(484), 12, 22, 0x275bce, 1);
+    sidePodRight.setStrokeStyle(2, 0xa3ebff, 0.84);
     const core = this.add.circle(207, scaleY(516), 9, 0xfff7bf, 0.98);
     const coreHalo = this.add.circle(207, scaleY(516), 18, 0x7ce6ff, 0.22);
 
@@ -139,9 +173,15 @@ export class BattleScene extends Phaser.Scene {
       wingRight,
       coreHalo,
       column,
-      cannonBase,
-      cannon,
-      muzzle,
+      sidePodLeft,
+      sidePodRight,
+      cannonMount,
+      cannonJoint,
+      cannonSleeveLeft,
+      cannonSleeveRight,
+      cannonBarrel,
+      muzzleBody,
+      muzzleGlow,
       core
     ]);
   }
@@ -155,46 +195,71 @@ export class BattleScene extends Phaser.Scene {
     const tint = PLANET_BY_ID[this.currentPlanetId].enemyTint;
     this.enemyHalo = this.add.ellipse(207, -80, isBoss ? 74 : 58, isBoss ? 32 : 24, 0x1038a6, 0.2);
 
-    const shadow = this.add.ellipse(0, 42, isBoss ? 54 : 42, isBoss ? 16 : 12, 0x1038a6, 0.24);
-    const body = this.add.circle(0, 0, isBoss ? 29 : 23, tint, 1);
+    const shadow = this.add.ellipse(0, 44, isBoss ? 56 : 44, isBoss ? 16 : 12, 0x1038a6, 0.24);
+    const body = this.add.ellipse(0, 2, isBoss ? 56 : 44, isBoss ? 64 : 50, tint, 1);
     body.setStrokeStyle(4, 0x123a99, 0.95);
-    const bodyGloss = this.add.circle(-(isBoss ? 8 : 6), -(isBoss ? 8 : 6), isBoss ? 9 : 7, 0xffffff, 0.22);
-    const band = this.add.rectangle(0, 3, isBoss ? 40 : 32, 10, 0xffd76c, 1);
-    band.setStrokeStyle(2, 0x123a99, 0.18);
-    const fuseCap = this.add.rectangle(0, -(isBoss ? 28 : 22), isBoss ? 18 : 14, 10, 0x73e8ff, 1);
-    fuseCap.setStrokeStyle(3, 0xffffff, 0.74);
-    const fuseLeft = this.add.rectangle(-(isBoss ? 7 : 5), -(isBoss ? 35 : 28), 4, isBoss ? 16 : 12, 0x73e8ff, 1);
-    fuseLeft.setAngle(-18);
-    const fuseRight = this.add.rectangle(isBoss ? 7 : 5, -(isBoss ? 35 : 28), 4, isBoss ? 16 : 12, 0x73e8ff, 1);
-    fuseRight.setAngle(18);
-    const spark = this.add.circle(0, -(isBoss ? 43 : 34), isBoss ? 6 : 5, 0xfff1a1, 0.98);
-    spark.setStrokeStyle(2, 0xffffff, 0.92);
-    const sparkCore = this.add.circle(0, -(isBoss ? 43 : 34), isBoss ? 3 : 2.5, 0xff7a59, 0.96);
-    const nose = this.add.triangle(
-      0,
-      isBoss ? 31 : 25,
-      0,
-      18,
-      -(isBoss ? 14 : 11),
-      -4,
-      isBoss ? 14 : 11,
-      -4,
-      0xff4d7e,
-      1
+    const bodyGloss = this.add.ellipse(
+      -(isBoss ? 9 : 7),
+      -(isBoss ? 10 : 8),
+      isBoss ? 20 : 15,
+      isBoss ? 26 : 20,
+      0xffffff,
+      0.18
     );
-    nose.setStrokeStyle(4, 0x123a99, 0.95);
+    const band = this.add.rectangle(0, 2, isBoss ? 40 : 32, 12, 0xffd76c, 1);
+    band.setStrokeStyle(2, 0x123a99, 0.22);
+    const bandBolt = this.add.circle(0, 2, isBoss ? 5 : 4, 0x2442a2, 0.96);
+    const cap = this.add.rectangle(0, -(isBoss ? 28 : 22), isBoss ? 20 : 16, 12, 0x5a6fcf, 1);
+    cap.setStrokeStyle(3, 0xffffff, 0.74);
+    const fuseStem = this.add.rectangle(0, -(isBoss ? 39 : 31), 5, isBoss ? 16 : 12, 0x65411d, 1);
+    fuseStem.setAngle(10);
+    const sparkA = this.add.rectangle(-(isBoss ? 8 : 6), -(isBoss ? 49 : 39), isBoss ? 4 : 3, isBoss ? 14 : 10, 0xfff1a1, 1);
+    sparkA.setAngle(-35);
+    const sparkB = this.add.rectangle(isBoss ? 2 : 1, -(isBoss ? 49 : 39), isBoss ? 4 : 3, isBoss ? 16 : 11, 0xffa65e, 1);
+    sparkB.setAngle(18);
+    const sparkCore = this.add.circle(isBoss ? 8 : 6, -(isBoss ? 48 : 38), isBoss ? 5 : 4, 0xff6f4a, 0.98);
+    const finLeft = this.add.triangle(
+      -(isBoss ? 22 : 17),
+      isBoss ? 14 : 12,
+      -2,
+      -12,
+      -18,
+      0,
+      -2,
+      14,
+      0xe1ecff,
+      0.9
+    );
+    finLeft.setStrokeStyle(2, 0x123a99, 0.52);
+    const finRight = this.add.triangle(
+      isBoss ? 22 : 17,
+      isBoss ? 14 : 12,
+      2,
+      -12,
+      18,
+      0,
+      2,
+      14,
+      0xe1ecff,
+      0.9
+    );
+    finRight.setStrokeStyle(2, 0x123a99, 0.52);
+    const bottomCap = this.add.circle(0, isBoss ? 28 : 22, isBoss ? 11 : 9, 0x1c348c, 0.96);
 
     this.enemy = this.add.container(207, -80, [
       shadow,
       body,
       bodyGloss,
       band,
-      fuseCap,
-      fuseLeft,
-      fuseRight,
-      spark,
+      bandBolt,
+      cap,
+      fuseStem,
+      sparkA,
+      sparkB,
       sparkCore,
-      nose,
+      finLeft,
+      finRight,
+      bottomCap,
     ]);
 
     this.enemyHalo.setDepth(3);
