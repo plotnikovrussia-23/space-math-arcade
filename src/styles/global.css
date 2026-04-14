@@ -57,6 +57,21 @@ button {
     14px;
 }
 
+.build-badge {
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+  z-index: 50;
+  border-radius: 999px;
+  background: rgba(17, 32, 77, 0.82);
+  padding: 6px 10px;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 0.72rem;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+}
+
 .screen {
   display: flex;
   min-height: calc(100vh - max(18px, env(safe-area-inset-top)) - max(18px, env(safe-area-inset-bottom)));
