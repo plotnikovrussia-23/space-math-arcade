@@ -32,11 +32,13 @@ html,
 body,
 #root {
   min-height: 100%;
+  height: 100%;
   margin: 0;
 }
 
 body {
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 button {
@@ -46,6 +48,7 @@ button {
 .app-shell {
   max-width: 460px;
   min-height: 100vh;
+  min-height: 100dvh;
   margin: 0 auto;
   padding:
     max(18px, env(safe-area-inset-top))
@@ -57,6 +60,7 @@ button {
 .screen {
   display: flex;
   min-height: calc(100vh - max(18px, env(safe-area-inset-top)) - max(18px, env(safe-area-inset-bottom)));
+  min-height: calc(100dvh - max(18px, env(safe-area-inset-top)) - max(18px, env(safe-area-inset-bottom)));
   flex-direction: column;
   gap: 16px;
 }
@@ -343,6 +347,7 @@ button {
   position: relative;
   overflow: hidden;
   flex: 1;
+  min-height: 0;
   border-radius: 28px;
   background: rgba(255, 255, 255, 0.32);
   padding: 10px;
@@ -364,8 +369,16 @@ button {
 .battle-canvas {
   width: 100%;
   min-height: 330px;
+  display: flex;
+  align-items: stretch;
   overflow: hidden;
   border-radius: 24px;
+}
+
+.battle-canvas canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
 }
 
 .station-overlay {
@@ -799,8 +812,8 @@ button {
   }
 
   .battle-canvas {
-    height: min(44vh, 280px);
-    min-height: 250px;
+    height: min(38dvh, 250px);
+    min-height: 220px;
     border-radius: 20px;
   }
 
@@ -966,7 +979,7 @@ button {
   }
 
   .answer-button {
-    min-height: 70px;
+    min-height: 68px;
     font-size: 1.45rem;
   }
 }
