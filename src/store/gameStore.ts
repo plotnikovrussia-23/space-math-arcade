@@ -39,20 +39,58 @@ const initialCompletedPlanetIndex: Record<GameMode, number> = {
   galactic: -1
 };
 
-const SUCCESS_REVEAL_MIN_DELAY_MS = 2400;
+const SUCCESS_REVEAL_MIN_DELAY_MS = 2100;
 const FAILURE_REVEAL_DELAY_MS = 840;
 
 let timeoutHandle: number | null = null;
 let revealHandle: number | null = null;
 
-const getSuccessVoiceLine = (spokenAnswerText: string) => {
+const getSuccessVoiceFeedback = (
+  status: "instant" | "good" | "slow",
+  spokenAnswerText: string
+) => {
+  if (status === "instant") {
+    const variants = [
+      `молния, ${spokenAnswerText}`,
+      `супер, ${spokenAnswerText}`,
+      `точно, ${spokenAnswerText}`
+    ];
+
+    return {
+      text: variants[Math.floor(Math.random() * variants.length)],
+      rate: 1,
+      pitch: 1.12,
+      postSpeechDelayMs: 180
+    };
+  }
+
+  if (status === "good") {
+    const variants = [
+      `верно, ${spokenAnswerText}`,
+      `отлично, ${spokenAnswerText}`,
+      `это ${spokenAnswerText}`
+    ];
+
+    return {
+      text: variants[Math.floor(Math.random() * variants.length)],
+      rate: 0.94,
+      pitch: 1.05,
+      postSpeechDelayMs: 220
+    };
+  }
+
   const variants = [
-    `верно, ${spokenAnswerText}`,
-    `точно, ${spokenAnswerText}`,
-    `это ${spokenAnswerText}`
+    `есть, ${spokenAnswerText}`,
+    `получилось, ${spokenAnswerText}`,
+    `молодец, ${spokenAnswerText}`
   ];
 
-  return variants[Math.floor(Math.random() * variants.length)];
+  return {
+    text: variants[Math.floor(Math.random() * variants.length)],
+    rate: 0.9,
+    pitch: 1.02,
+    postSpeechDelayMs: 260
+  };
 };
 
 const clearHandles = () => {
@@ -445,17 +483,24 @@ const submitBattleAnswer = (
   });
 
   if (succeeded) {
+    const successVoice =
+      rawStatus === "instant"
+        ? getSuccessVoiceFeedback("instant", question.spokenAnswerText)
+        : rawStatus === "good"
+          ? getSuccessVoiceFeedback("good", question.spokenAnswerText)
+          : getSuccessVoiceFeedback("slow", question.spokenAnswerText);
+
     audioDirector.playSfx("shoot");
     audioDirector.playSfx("success");
     if (nextBattle.weaponLevel > battle.weaponLevel) {
       audioDirector.playSfx("upgrade");
     }
     void audioDirector
-      .speakAndWait(getSuccessVoiceLine(question.spokenAnswerText), {
+      .speakAndWait(successVoice.text, {
         minimumDurationMs: SUCCESS_REVEAL_MIN_DELAY_MS,
-        postSpeechDelayMs: 260,
-        rate: 0.92,
-        pitch: 1.04
+        postSpeechDelayMs: successVoice.postSpeechDelayMs,
+        rate: successVoice.rate,
+        pitch: successVoice.pitch
       })
       .then(() => {
         resolveOutcomeAndContinue(set, get, currentOutcome.id);
