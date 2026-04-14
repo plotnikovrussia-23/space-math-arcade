@@ -337,6 +337,8 @@ button {
 .battle-screen {
   flex: 1 1 auto;
   min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
   gap: 12px;
 }
 
@@ -803,6 +805,7 @@ button {
   .battle-screen {
     flex: 1 1 auto;
     min-height: 0;
+    grid-template-rows: auto minmax(0, 1fr) auto;
     gap: 10px;
   }
 
@@ -1027,6 +1030,7 @@ button {
   }
 
   .battle-screen {
+    grid-template-rows: auto minmax(0, 1fr) auto;
     gap: 8px;
   }
 
@@ -1153,5 +1157,99 @@ button {
   .answer-button {
     min-height: 50px;
     font-size: 1.05rem;
+  }
+}
+
+@media (max-width: 460px) and (max-height: 820px) {
+  .app-shell {
+    padding-top: max(6px, env(safe-area-inset-top));
+    padding-bottom: max(6px, env(safe-area-inset-bottom));
+  }
+
+  .screen {
+    gap: 8px;
+  }
+
+  .battle-screen {
+    gap: 6px;
+  }
+
+  .battle-topbar {
+    gap: 8px;
+    border-radius: 16px;
+    padding: 7px 9px;
+  }
+
+  .shield-segment {
+    width: 17px;
+    height: 10px;
+  }
+
+  .battle-meta {
+    gap: 0;
+    font-size: 0.68rem;
+  }
+
+  .battle-meta strong {
+    font-size: 0.8rem;
+  }
+
+  .battle-weapon {
+    display: none;
+  }
+
+  .battle-panel {
+    border-radius: 20px;
+    padding: 4px;
+  }
+
+  .status-ribbon {
+    gap: 6px;
+    margin-bottom: 3px;
+    border-radius: 12px;
+    padding: 5px 7px;
+    font-size: 0.68rem;
+  }
+
+  .status-ribbon strong {
+    font-size: 0.72rem;
+  }
+
+  .battle-canvas {
+    height: min(20svh, 126px);
+    min-height: 104px;
+    border-radius: 16px;
+  }
+
+  .question-panel {
+    inset: auto 6px 6px 6px;
+    gap: 4px;
+  }
+
+  .formula,
+  .feedback-banner {
+    border-radius: 14px;
+    padding: 5px 8px;
+  }
+
+  .formula {
+    font-size: clamp(0.98rem, 4.3vw, 1.2rem);
+    line-height: 1;
+  }
+
+  .feedback-banner {
+    min-height: 24px;
+    font-size: 0.66rem;
+  }
+
+  .answers-grid {
+    gap: 6px;
+  }
+
+  .answer-button {
+    min-height: 44px;
+    border-radius: 16px;
+    font-size: 0.98rem;
+    box-shadow: 0 8px 14px rgba(16, 56, 166, 0.1);
   }
 }
